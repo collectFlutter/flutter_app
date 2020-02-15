@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/bean/base_result.dart';
 
 import '../page_index.dart';
 
@@ -45,27 +46,33 @@ class HttpUtils {
     /// 添加拦截器
     if (Config.DEBUG) {
       _dio.interceptors
-        ..add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-          debugPrint("\n================== 请求数据 ==========================");
-          debugPrint("url = ${options.uri.toString()}");
-          debugPrint("headers = ${options.headers}");
-          debugPrint("params = ${options.data}");
-        }, onResponse: (Response response) {
-          debugPrint("\n================== 响应数据 ==========================");
-          debugPrint("code = ${response.statusCode}");
-          debugPrint("data = ${response.data}");
-          debugPrint("\n");
-        }, onError: (DioError e) {
-          debugPrint("\n================== 错误响应数据 ======================");
-          debugPrint("type = ${e.type}");
-          debugPrint("error = ${e.error}");
-          debugPrint("message = ${e.message}");
-          debugPrint("\n");
-        }))
+        ..add(InterceptorsWrapper(
+          /// 请求时的处理
+          onRequest: (RequestOptions options) {
+            debugPrint("\n================== 请求数据 ==========================");
+            debugPrint("url = ${options.uri.toString()}");
+            debugPrint("headers = ${options.headers}");
+            debugPrint("params = ${options.data}");
+          },
+
+          /// 响应时的处理
+          onResponse: (Response response) {
+            debugPrint("\n================== 响应数据 ==========================");
+            debugPrint("code = ${response.statusCode}");
+            debugPrint("data = ${response.data}");
+            debugPrint("\n");
+          },
+          onError: (DioError e) {
+            debugPrint("\n================== 错误响应数据 ======================");
+            debugPrint("type = ${e.type}");
+            debugPrint("error = ${e.error}");
+            debugPrint("message = ${e.message}");
+            debugPrint("\n");
+          },
+        ))
 
         /// 添加 LogInterceptor 拦截器来自动打印请求、响应日志
         ..add(LogInterceptor(
-          error: true,
           request: false,
           responseBody: true,
           responseHeader: false,
@@ -82,7 +89,7 @@ class HttpUtils {
   /// [options] The request options.
   ///
   /// String 返回 json data .
-  request(
+  Future<Response> request(
     String path, {
     Map<String, dynamic> data,
     String method: GET,
@@ -147,7 +154,7 @@ class HttpUtils {
     debugPrint('download请求启动! url：$url');
     Response response;
     try {
-      response = await dio.download(
+      response = await Dio().download(
         url,
         savePath,
         cancelToken: cancelToken,
@@ -158,6 +165,53 @@ class HttpUtils {
           onReceiveProgress(count, total);
         },
       );
+    } on DioError catch (e) {
+      debugPrint(e.response.toString());
+      formatError(e);
+    }
+
+    return response;
+  }
+
+  /// 上传文件
+  ///
+  /// [path] The url path.
+  /// [data] The request data
+  ///
+  Future<Response> uploadFile(String path,
+      {String baseUrl = ApiUrl.BASE_URL, @required FormData data}) async {
+    /// 打印请求相关信息：请求地址、请求方式、请求参数
+    debugPrint("请求地址：【$baseUrl$path】");
+    debugPrint('请求参数：' + data.toString());
+    Response response;
+    try {
+      response = await Dio(
+        BaseOptions(
+            baseUrl: baseUrl, connectTimeout: 15000, receiveTimeout: 15000),
+      ).post(
+        "$path",
+        data: data,
+        onReceiveProgress: (int count, int total) {
+          debugPrint(
+              'onReceiveProgress: ${(count / total * 100).toStringAsFixed(0)} %');
+        },
+        onSendProgress: (int count, int total) {
+          debugPrint(
+              'onSendProgress: ${(count / total * 100).toStringAsFixed(0)} %');
+        },
+      );
+
+      /// 响应数据，可能已经被转换了类型, 详情请参考Options中的[ResponseType].
+      debugPrint('请求成功!response.data：${response.data}');
+
+      /// 响应头
+      debugPrint('请求成功!response.headers：${response.headers}');
+
+      /// 本次请求信息
+      debugPrint('请求成功!response.request：${response.request}');
+
+      /// Http status code.
+      debugPrint('请求成功!response.statusCode：${response.statusCode}');
     } on DioError catch (e) {
       debugPrint(e.response.toString());
       formatError(e);
@@ -214,7 +268,7 @@ class HttpUtils {
     Map<String, dynamic> params,
     CancelToken cancelToken,
     Options options,
-    Function errorCallBack,
+    Function(BaseResult error) errorCallBack,
   }) async {
     _requestHttp(path, successCallBack,
         method: GET,
@@ -230,7 +284,7 @@ class HttpUtils {
     Map<String, dynamic> params,
     CancelToken cancelToken,
     Options options,
-    Function errorCallBack,
+    Function(BaseResult error) errorCallBack,
   }) async {
     _requestHttp(path, successCallBack,
         method: POST,
@@ -240,50 +294,43 @@ class HttpUtils {
         cancelToken: cancelToken);
   }
 
-  _requestHttp(
-    String path,
-    Function successCallBack, {
-    String method,
-    Map<String, dynamic> params,
-    Function errorCallBack,
-    CancelToken cancelToken,
-    Options options,
-  }) async {
+  _requestHttp(String path, Function successCallBack,
+      {@required String method,
+      Map<String, dynamic> params,
+      Function(BaseResult error) errorCallBack,
+      CancelToken cancelToken,
+      Options options}) async {
+    debugPrint("请求地址：【$path】");
+    debugPrint('请求参数：' + params.toString());
+
     Response response;
     try {
       if (method == GET) {
-        if (params != null && params.isNotEmpty) {
-          response = await dio.get(path,
-              queryParameters: params,
-              options: _checkOptions(method, options),
-              cancelToken: cancelToken);
+        if (null != params && params.isNotEmpty) {
+          response = await dio.get(
+            path,
+            queryParameters: params,
+            options: _checkOptions(method, options),
+            cancelToken: cancelToken,
+          );
         } else {
-          response = await dio.get(path,
-              options: _checkOptions(method, options),
-              cancelToken: cancelToken);
+          response = await dio.get(
+            path,
+            options: _checkOptions(method, options),
+            cancelToken: cancelToken,
+          );
         }
       } else if (method == POST) {
-        if (params != null && params.isNotEmpty) {
-          response = await dio
-              .post(path, data: params, options: _checkOptions(method, options),
-                  onReceiveProgress: (int count, int total) {
-            debugPrint(
-                'onReceiveProgress: ${(count / total * 100).toStringAsFixed(0)} %');
-          }, onSendProgress: (int count, int total) {
+        response = await dio.post(
+          path,
+          data: params,
+          options: _checkOptions(method, options),
+          onSendProgress: (int count, int total) {
             debugPrint(
                 'onSendProgress: ${(count / total * 100).toStringAsFixed(0)} %');
-          }, cancelToken: cancelToken);
-        } else {
-          response = await dio
-              .post(path, options: _checkOptions(method, options),
-                  onReceiveProgress: (int count, int total) {
-            debugPrint(
-                'onReceiveProgress: ${(count / total * 100).toStringAsFixed(0)} %');
-          }, onSendProgress: (int count, int total) {
-            debugPrint(
-                'onSendProgress: ${(count / total * 100).toStringAsFixed(0)} %');
-          }, cancelToken: cancelToken);
-        }
+          },
+          cancelToken: cancelToken,
+        );
       }
 
       /// debug模式才打印
@@ -310,22 +357,33 @@ class HttpUtils {
         debugPrint('请求异常: ' + error.toString());
         debugPrint('请求异常url: ' + path);
         debugPrint('请求头: ' + dio.options.headers.toString());
-        debugPrint('method: ' + dio.options.method);
+        debugPrint('method: $method');
       }
-      _error(errorCallBack, error.message);
-      return '';
+      _error(
+          errorCallBack,
+          BaseResult(
+              message: error.message.toString(),
+              code: error.response.statusCode.toString()));
     }
-    String dataStr = json.encode(response.data);
-    Map<String, dynamic> dataMap = json.decode(dataStr);
-    if (dataMap == null || dataMap['code'] == 0) {
-      _error(errorCallBack,
-          '错误码：' + dataMap['code'].toString() + dataMap['message'].toString());
-    } else if (successCallBack != null) {
-      successCallBack(dataMap);
+    if (response != null &&
+        response.statusCode >= 200 &&
+        response.statusCode < 300) {
+      BaseResult result = BaseResult.fromMap(json.decode(response.data));
+      if (result == null || result.code != '0') {
+        _error(errorCallBack, result);
+      } else if (successCallBack != null) {
+        successCallBack(result.data);
+      }
+    } else {
+      _error(
+          errorCallBack,
+          BaseResult(
+              message: response.data.toString(),
+              code: response.statusCode.toString()));
     }
   }
 
-  _error(Function errorCallBack, String error) {
+  _error(Function(BaseResult error) errorCallBack, BaseResult error) {
     if (errorCallBack != null) {
       errorCallBack(error);
     }

@@ -17,8 +17,7 @@ class SplashPage extends StatelessWidget {
         body: Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            ImageLoadView("images/splash.jpg",
-                imageType: ImageType.assets, fit: BoxFit.cover),
+            Image.asset("images/splash.jpg"),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

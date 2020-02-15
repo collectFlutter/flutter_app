@@ -18,7 +18,7 @@ class AnimatedCDView extends AnimatedWidget {
             angle: animation.value * 2 * pi,
             child: Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(200.0),
+                    shape: BoxShape.circle,
                     border:
                         Border.all(color: Color.fromRGBO(192, 193, 193, 0.2)),
                     boxShadow: [
@@ -37,7 +37,7 @@ class AnimatedCDView extends AnimatedWidget {
                           width: 190,
                           borderRadius:
                               BorderRadius.all(Radius.circular(150.0)),
-                          fit: BoxFit.cover),
+                      ),
                       CircleAvatar(
                           backgroundColor: Colors.white,
                           radius: 27.5,

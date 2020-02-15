@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_app/bean/friends_dynamic.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import '../ui/item_dynamic.dart';
@@ -85,9 +84,7 @@ class _WeChatFriendsCircleState extends State<WeChatFriendsCircle> {
                   children: <Widget>[
                     Container(
                         child: ImageLoadView(backgroundImage,
-                            fit: BoxFit.cover,
-                            height: headerHeight,
-                            width: Utils.width),
+                            height: headerHeight, width: Utils.width),
                         margin: EdgeInsets.only(bottom: 30.0)),
                     Container(
                         child: Row(
@@ -110,47 +107,47 @@ class _WeChatFriendsCircleState extends State<WeChatFriendsCircle> {
                         margin: EdgeInsets.only(right: 10))
                   ],
                 ),
-                SizedBox(height: 10),
-                ListView.builder(
-                    itemBuilder: (context, index) =>
-                        ItemDynamic(friendsDynamic[index]),
-                    itemCount: friendsDynamic.length,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    primary: false)
+                Gaps.vGap10,
+                ListView.separated(
+                  itemBuilder: (context, index) =>
+                      ItemDynamic(friendsDynamic[index]),
+                  itemCount: friendsDynamic.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  primary: false,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Container(
+                    height: 0.4,
+                    color: Colors.grey,
+                  ),
+                )
               ]),
             ),
-            Container(
-              height: Utils.navigationBarHeight,
-              child: AppBar(
-                titleSpacing: 0,
-                leading: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () => Navigator.pop(context)),
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.add_a_photo),
-                    onPressed: () => _showDialog(context),
-                  )
-                ],
-                iconTheme: IconThemeData(color: c, size: 20),
-                elevation: 0.0,
-                backgroundColor:
-                    Color.fromARGB((navAlpha * 255).toInt(), 180, 180, 180),
-                title: Text(title,
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        color:
-                            Color.fromARGB((navAlpha * 255).toInt(), 0, 0, 0))),
+            CustomAppBar(
+              iconColor: Colors.white,
+              bgColor: Color.fromARGB((navAlpha * 255).toInt(), 180, 180, 180),
+              title: Text(title,
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      color: Color.fromARGB(
+                          (navAlpha * 255).toInt(), 255, 255, 255))),
+              action: IconButton(
+                icon: Icon(
+                  Icons.add_a_photo,
+                  color: Colors.white,
+                ),
+                onPressed: () => _showDialog(context),
               ),
-            )
+            ),
           ],
         ));
   }
 
   void getData() async {
-    rootBundle.loadString('assets/data/friends.json').then((value) {
-      friendsDynamic = FriendsDynamic.fromMapList(json.decode(value));
+    FileUtil.getInstance()
+        .readDataFromAssets("assets/data/", "friends.json")
+        .then((data) {
+      friendsDynamic = FriendsDynamic.fromMapList(json.decode(data));
       setState(() {});
     });
   }
@@ -211,17 +208,9 @@ class _WeChatFriendsCircleState extends State<WeChatFriendsCircle> {
       );
 
       for (var r in resultList) {
-        var t = await r.filePath;
+        var t = r.name;
         print(t);
       }
-    } on PlatformException catch (e) {
-      debugPrint(e.message.toString());
-    } on NoImagesSelectedException catch (e) {
-      debugPrint(e.message.toString());
-    } on PermissionDeniedException catch (e) {
-      debugPrint(e.message.toString());
-    } on PermissionPermanentlyDeniedExeption catch (e) {
-      debugPrint(e.message.toString());
     } on Exception catch (e) {
       debugPrint(e.toString());
     }

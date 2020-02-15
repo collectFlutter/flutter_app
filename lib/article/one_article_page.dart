@@ -16,6 +16,12 @@ class _OneArticlePageState extends State<OneArticlePage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
+  void initState() {
+    super.initState();
+    Future.microtask(() =>
+        Store.value<ArticleModel>(context, listen: false).getArticle('today'));
+  }
+
   @override
   void dispose() {
     _tabController?.dispose();

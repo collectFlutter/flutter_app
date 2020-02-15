@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 import '../../page_index.dart';
 import '../index.dart';
@@ -20,7 +19,7 @@ class BookDetailsHeaderView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.only(top: Utils.navigationBarHeight),
-        height: 285,
+        height: 250,
         decoration: BoxDecoration(
             gradient: LinearGradient(
                 colors: [pageTopColorStart, pageTopColorEnd],
@@ -61,7 +60,7 @@ class BookDetailsHeaderView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Row(children: <Widget>[
-                            Icon(FontAwesome.user,
+                            Icon(Icons.person,
                                 size: 16, color: readerMainColor),
                             Text(
                               '${book?.author ?? ""}',

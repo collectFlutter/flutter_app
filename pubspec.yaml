@@ -20,74 +20,69 @@ dependencies: # 应用或包依赖的其它包或插件
   flutter_localizations:
     sdk: flutter
 
-  amap_base_location: ^0.4.0+2
+  amap_location_fluttify: ^0.8.6+356f11c
 
   # https://github.com/aagarwal1012/Animated-Text-Kit
-  animated_text_kit: ^1.3.1
+  animated_text_kit: ^2.0.0
 
-  audioplayers: ^0.13.3
+  audioplayers: ^0.14.0
 
   # AzListView，Flutter 城市列表，联系人列表，自定义Header，索引，悬停效果。
   azlistview: ^0.1.2
 
   badges: ^1.1.0
 
+  # 条形码
+  barcode_flutter: ^1.1.0
+
   # 扫描二维码
   barcode_scan: ^1.0.0
+
+  cached_network_image: ^2.0.0
 
   # 图表
   charts_flutter: ^0.8.1
 
   chewie: ^0.9.8+1
 
-  city_picker: ^0.1.4
-
-  city_pickers: ^0.1.29
-
   clippy_flutter: ^1.1.0
 
   contact_picker: ^0.0.2
-
-  crypto: ^2.1.3
 
   custom_widgets:
     path: custom_widgets/
 
   # 设备信息
-  device_info: ^0.4.1+2
+  device_info: ^0.4.1+4
 
   # 网络请求库
-  dio: ^3.0.7
+  dio: ^3.0.8
 
   # 英文单词库
   english_words: ^3.1.5
 
   fancy_bottom_navigation: ^0.3.2
 
-#  flute_music_player:
-#    git:
-#      url: https://github.com/iampawan/Flute-Music-Player
-
   # 颜色选择器
   flutter_colorpicker: ^0.2.6
 
   # 刷新加载控件
-  flutter_easyrefresh: ^2.0.4
+  flutter_easyrefresh: ^2.0.9
 
-  flutter_html: ^0.11.0
+  flutter_html: ^0.11.1
 
   # 侧滑菜单
-  flutter_inner_drawer: ^0.5.2
+  flutter_inner_drawer: ^0.5.4
 
   flutter_jd_address_selector:
     git:
       url: https://github.com/shichunlei/flutter_jd_address_selector
 
   # https://github.com/dooboolab/flutter_sound
-  flutter_sound: ^1.5.2
+  flutter_sound: ^2.0.4
 
   # 加载提示组件
-  flutter_spinkit: ^4.1.0
+  flutter_spinkit: ^4.1.1+1
 
   # 瀑布流
   flutter_staggered_grid_view: ^0.3.0
@@ -107,65 +102,57 @@ dependencies: # 应用或包依赖的其它包或插件
   # SimpleLineIcons 地址：https://simplelineicons.github.io/
   flutter_vector_icons: ^0.2.1
 
-  flutter_webview_plugin: ^0.3.9+1
-
-  gradient_text: ^1.0.2
+  flutter_webview_plugin: ^0.3.10+1
 
   # 图片裁剪
-  image_cropper: ^1.1.1
+  image_cropper: ^1.2.1
 
   image_gallery_saver: ^1.2.2
 
   # 图片选择器
-  image_picker: ^0.6.2+1
+  image_picker: ^0.6.3+1
 
   # 引导页
   intro_slider: ^2.2.8
 
-  # 处理键盘事件 https://github.com/diegoveloper/flutter_keyboard_actions
-  keyboard_actions: ^2.1.2
-
   # 汉字转拼音库 https://github.com/flutterchina/lpinyin
-  lpinyin: ^1.0.7
+  lpinyin: ^1.0.9
 
-  multi_image_picker: ^4.5.9
+  multi_image_picker: ^4.6.1
 
-  package_info: ^0.4.0+11
+  package_info: ^0.4.0+13
 
   palette_generator: ^0.2.0
 
   # 滑动视差效果图片 https://github.com/pulyaevskiy/parallax-image
   parallax_image: ^0.3.1+1
 
-  path_drawing: ^0.4.1
+  path_provider: ^1.6.0
 
-  path_provider: ^1.4.5
+  permission_handler: ^4.2.0+hotfix.3
 
   # PhotoView
-  photo_view: ^0.9.0
+  photo_view: ^0.9.1
 
   # 数据管理层
-  provider: ^3.2.0
+  provider: ^4.0.4
 
   # flutter 生成二维码
-  qr_flutter: ^3.1.0
+  qr_flutter: ^3.2.0
 
   #
   rounded_letter: ^0.0.6
 
-  # https://github.com/ReactiveX/rxdart
-  rxdart: ^0.22.6
-
-  share: ^0.6.3+3
+  share: ^0.6.3+5
 
   # SP
-  shared_preferences: ^0.5.4+6
+  shared_preferences: ^0.5.6+1
 
   # 骨架屏
   shimmer: ^1.0.1
 
   # 数据库
-  sqflite: ^1.1.7+3
+  sqflite: ^1.2.0
 
   # 时间线 https://github.com/furkantektas/timeline_list
   timeline_list: ^0.0.5
@@ -173,10 +160,10 @@ dependencies: # 应用或包依赖的其它包或插件
   # 透明占位图片
   transparent_image: ^1.0.0
 
-  url_launcher: ^5.2.7
+  url_launcher: ^5.4.1
 
   # 视频播放器器
-  video_player: ^0.10.3+3
+  video_player: ^0.10.7
 
 dev_dependencies: # 开发环境依赖的工具包（而不是flutter应用本身依赖的包）
   flutter_test:

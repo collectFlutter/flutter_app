@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:amap_base_location/amap_base_location.dart';
+import 'package:amap_location_fluttify/amap_location_fluttify.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +15,7 @@ void main() async {
   setCustomErrorPage();
   _setTargetPlatformForDesktop();
   await SpUtil.getInstance();
-  await AMap.init('24d68b20bd23ec522658ddd98d3cd5b0');
+  await AmapCore.init(Config.AMAP_KEY);
   runZoned(() {
     //强制横屏
     // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
@@ -24,6 +24,7 @@ void main() async {
     SystemChrome.setPreferredOrientations(
             [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp])
         .then((_) {
+      Utils.statusBarEnable(true);
       runApp(Store.init(child: MyApp()));
 
       if (Platform.isAndroid) {

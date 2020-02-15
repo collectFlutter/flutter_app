@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/ui_screen/demo/home.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../page_index.dart';
 
@@ -22,6 +25,7 @@ class ExpandStateBean {
           SubExpandBean('Image', ImageWidget()),
           SubExpandBean('Icon', IconWidget()),
           SubExpandBean('TextField', TextFieldWidget()),
+          SubExpandBean('全局悬浮按钮', FloatingTouchDemoPage()),
           SubExpandBean('Slider', SliderWidget()),
           SubExpandBean('Range Slider', RangeSliderPage()),
           SubExpandBean('Chip', ChipWidget()),
@@ -29,6 +33,8 @@ class ExpandStateBean {
           SubExpandBean('主题', ThemeSample()),
           SubExpandBean('ColorFiltered', ColorFilteredWidget()),
           SubExpandBean('ScrollNotification', ScrollNotificationDemo()),
+          SubExpandBean(
+              'ValueListenableBuilder', ValueListenableBuilderWidget()),
         ]),
     ExpandStateBean(
         leading: Icons.filter_2,
@@ -75,14 +81,17 @@ class ExpandStateBean {
           SubExpandBean('AnimatedSwitcher', AnimatedSwitcherSample()),
           SubExpandBean('AnimatedCrossFade', AnimatedCrossFadeDemo()),
           SubExpandBean('AnimatedBuilder', AnimatedBuilderDemo()),
+          SubExpandBean('TweenAnimationBuilder', TweenAnimationBuilderDemo()),
           SubExpandBean('AnimatedIcons', AnimatedIconsDemo()),
           SubExpandBean('AnimatedPadding', AnimatedPaddingDemo()),
           SubExpandBean('AnimatedSize', AnimatedSizeDemo()),
           SubExpandBean('AnimatedAlign', AnimatedAlignDemo()),
           SubExpandBean('AnimatedPositioned', AnimatedPositionedDemo()),
+          SubExpandBean('AnimatedPhysicalModel', AnimatedPhysicalModelDemo()),
           SubExpandBean('AnimatedNumber', AnimatedNumberDemo()),
           SubExpandBean('Tween', TweenDemo()),
           SubExpandBean('自定义动画', CustomAnimationDemo()),
+          SubExpandBean('路由过渡动画', RouteSample()),
         ]),
     ExpandStateBean(
         leading: Icons.filter_5,
@@ -101,19 +110,14 @@ class ExpandStateBean {
           SubExpandBean('瀑布流示例', StaggeredViewPage()),
           SubExpandBean('评分控件', StarRatingWidget()),
           SubExpandBean('Clippy', ClippyWidget()),
-          SubExpandBean('城市选择控件', CityPickerPage()),
-          SubExpandBean('iOS风格城市选择控件', IosCityPickersPage()),
-          SubExpandBean('fullpage风格城市选择控件', FullpageCityPickersPage()),
           SubExpandBean('设备信息', DeviceInfoPage()),
-          SubExpandBean('二维码（生成/扫描）', QrImageWidget()),
           SubExpandBean('图表示例', ChartsWidget()),
           SubExpandBean('本地读取json数据', LoadingJsonPage()),
           SubExpandBean('侧滑菜单示例', InnerDrawerSample()),
-          SubExpandBean('路由过渡动画', RouteSample()),
           SubExpandBean('DropDown', DropDownSample()),
           SubExpandBean('Image Colors', ImageColors()),
           SubExpandBean('尺子', RulerSample()),
-          SubExpandBean('Preview', PreviewSample()),
+          SubExpandBean('尺子2', HorizontalPickerDemo()),
           SubExpandBean('高德地图定位', AMapLocationDemo()),
           SubExpandBean('SecondFloor', SecondFloorDemo()),
           SubExpandBean('视差图片效果', ParallaxImageDemo()),
@@ -121,6 +125,7 @@ class ExpandStateBean {
           SubExpandBean('录音', SoundDemo()),
         ]),
     ExpandStateBean(leading: Icons.filter_6, title: 'Beautiful UI', children: [
+      SubExpandBean('Boarding Pass Cards', TicketFoldPage()),
       SubExpandBean('登录页面1', PasswordLoginPage()),
       SubExpandBean('登录页面2', LogonPage()),
       SubExpandBean('登录页面3', SlidingLoginPage()),
@@ -128,14 +133,21 @@ class ExpandStateBean {
       SubExpandBean('登录页面5', BottomSheetLoginPage()),
       SubExpandBean('登录页面6', OnboardingPage()),
       SubExpandBean('视频背景登录页面', LoginVideoPage()),
-//      SubExpandBean('Music Player', FluteMusicPlayerPage()),
+      SubExpandBean('Music Player', MusicPlayerPage()),
       SubExpandBean('Audio Player', AudioPlayersPage()),
       SubExpandBean('Flutter Sound', FlutterSoundPage()),
       SubExpandBean('CardFlip', CardFlipPage()),
       SubExpandBean('仿抖音首页动画', TikTokPage()),
       SubExpandBean('BackDrop', BackDropPage()),
+      SubExpandBean('CardScroll', CardScrollDemo()),
+      SubExpandBean('GuillotineMenu', GuillotineMenuPage()),
+      SubExpandBean('BottomMenu', BottomMenuPage()),
       SubExpandBean('BankScreen', BankScreen()),
-      SubExpandBean('TravelScreen', TravelScreen()),
+      SubExpandBean('BottomDrag', BottomDragWidgetDemo()),
+      SubExpandBean('LightDrawer', LightDrawerPage()),
+      SubExpandBean('ScrollHeader', ScrollHeaderDemoPage()),
+      SubExpandBean('QRCode', QRCodePage()),
+      SubExpandBean('DemoHomePage', DemoHomePage()),
     ]),
     ExpandStateBean(
         leading: Icons.filter_7,
@@ -145,6 +157,7 @@ class ExpandStateBean {
           SubExpandBean('仿好奇心日报', QDailySplashPage()),
           SubExpandBean('豆瓣电影', MovieHomePage()),
           SubExpandBean('tubi TV', TubiTVHomePage()),
+          SubExpandBean('NBA Sports', NBAHomePage()),
           SubExpandBean('百姓生活+', OnBoardingPage()),
           SubExpandBean('我是个句子迷', SplashPage()),
           SubExpandBean('有道精品课', YouDaoHomePage()),
@@ -168,24 +181,22 @@ class SubExpandBean {
 List<String> bannerImages = [
   "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2918882617,1624283714&fm=26&gp=0.jpg",
   'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1694196096,1956817301&fm=26&gp=0.jpg',
-  'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3473128871,1574804327&fm=26&gp=0.jpg',
   'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=422401622,3669771322&fm=26&gp=0.jpg',
-  'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2832342280,1019704477&fm=26&gp=0.jpg',
-  'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1759214474,1595279735&fm=26&gp=0.jpg',
-  'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4024827225,1981202973&fm=26&gp=0.jpg',
-  'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2029082490,2363810538&fm=26&gp=0.jpg',
-  'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2785384588,322545246&fm=26&gp=0.jpg',
-  'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=384115025,2366469586&fm=26&gp=0.jpg',
-  "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=556889999,3306363683&fm=26&gp=0.jpg",
-  "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4074334908,1434307869&fm=26&gp=0.jpg",
   "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2662785624,2609285852&fm=26&gp=0.jpg",
-  "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3182788030,321513843&fm=26&gp=0.jpg",
   "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2925061987,411404233&fm=26&gp=0.jpg",
   "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4176017085,1014898947&fm=26&gp=0.jpg",
   "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1151904050,4162194237&fm=26&gp=0.jpg",
   "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=379622373,74041926&fm=26&gp=0.jpg",
   "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3312451982,3816676872&fm=26&gp=0.jpg",
   "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2313290898,4177083589&fm=26&gp=0.jpg",
+  'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1759214474,1595279735&fm=26&gp=0.jpg',
+  'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2832342280,1019704477&fm=26&gp=0.jpg',
+  'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4024827225,1981202973&fm=26&gp=0.jpg',
+  'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2029082490,2363810538&fm=26&gp=0.jpg',
+  'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2785384588,322545246&fm=26&gp=0.jpg',
+  'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=384115025,2366469586&fm=26&gp=0.jpg',
+  "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=556889999,3306363683&fm=26&gp=0.jpg",
+  "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4074334908,1434307869&fm=26&gp=0.jpg",
   "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1114909265,4252356893&fm=26&gp=0.jpg",
   "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3496053885,3190325716&fm=26&gp=0.jpg",
   "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=322974403,2804872580&fm=26&gp=0.jpg",
@@ -475,7 +486,7 @@ class ChartFlutterBean {
 }
 
 var backgroundImage =
-    'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1444433231,507640515&fm=11&gp=0.jpg';
+    'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=207405038,2990742581&fm=26&gp=0.jpg';
 
 var douBanDefaultImage =
     "https://img1.doubanio.com/f/movie/ca527386eb8c4e325611e22dfcb04cc116d6b423/pics/movie/celebrity-default-small.png";
@@ -607,4 +618,37 @@ List<String> guideList = [
   "images/qdaily/bg_whatsnew_bg_1.jpg",
   "images/qdaily/bg_whatsnew_bg_2.jpg",
   "images/qdaily/bg_whatsnew_bg_3.jpg"
+];
+
+List<Widget> loadingWidgets = [
+  SpinKitThreeBounce(color: Utils.strToColor('ThreeBounce'), size: 30.0),
+  SpinKitCircle(color: Utils.strToColor('Circle')),
+  SpinKitChasingDots(color: Utils.strToColor('ChasingDots')),
+  SpinKitRotatingCircle(color: Utils.strToColor('RotatingCircle')),
+  SpinKitRotatingPlain(color: Utils.strToColor('RotatingPlain')),
+  SpinKitPumpingHeart(color: Utils.strToColor('PumpingHeart')),
+  SpinKitPulse(color: Utils.strToColor('Pulse')),
+  SpinKitDoubleBounce(color: Colors.grey),
+  SpinKitWave(color: Colors.blue, type: SpinKitWaveType.start),
+  SpinKitWave(color: Colors.red, type: SpinKitWaveType.center),
+  SpinKitWave(color: Colors.pink, type: SpinKitWaveType.end),
+  SpinKitWanderingCubes(color: Colors.teal),
+  SpinKitWanderingCubes(color: Colors.lightBlue, shape: BoxShape.circle),
+  SpinKitFadingFour(color: Colors.lightBlueAccent),
+  SpinKitFadingFour(color: Colors.lightGreen, shape: BoxShape.rectangle),
+  SpinKitFadingCube(color: Colors.lightGreenAccent),
+  SpinKitCubeGrid(size: 51.0, color: Colors.lime),
+  SpinKitFoldingCube(color: Colors.limeAccent),
+  SpinKitRing(color: Colors.teal),
+  SpinKitDualRing(color: Colors.tealAccent),
+  SpinKitRipple(color: Colors.pinkAccent),
+  SpinKitFadingGrid(color: Colors.pinkAccent),
+  SpinKitFadingGrid(color: Colors.purple, shape: BoxShape.rectangle),
+  SpinKitHourGlass(color: Colors.purpleAccent),
+  SpinKitSpinningCircle(color: Colors.deepOrange),
+  SpinKitSpinningCircle(color: Colors.deepPurple, shape: BoxShape.rectangle),
+  SpinKitFadingCircle(color: Colors.deepPurpleAccent),
+  SpinKitPouringHourglass(color: Colors.indigo),
+  CupertinoActivityIndicator(),
+  CircularProgressIndicator(backgroundColor: Colors.greenAccent),
 ];

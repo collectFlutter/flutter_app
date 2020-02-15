@@ -11,9 +11,8 @@ import '../index.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
-  final GoodsProvider provider;
 
-  HomePage(this.title, this.provider, {Key key}) : super(key: key);
+  HomePage(this.title, {Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -28,9 +27,7 @@ class _HomePageState extends State<HomePage>
 
   List<Goods> goods = [];
 
-  double navAlpha = 0;
   double headerHeight;
-  ScrollController scrollController = ScrollController();
 
   int page;
 
@@ -44,33 +41,8 @@ class _HomePageState extends State<HomePage>
 
     headerHeight = Utils.width * 20 / 49;
 
-    scrollController.addListener(() {
-      var offset = scrollController.offset;
-      if (offset < 0) {
-        if (navAlpha != 0) {
-          setState(() {
-            navAlpha = 0;
-          });
-        }
-      } else if (offset < headerHeight) {
-        setState(() {
-          navAlpha = 1 - (headerHeight - offset) / headerHeight;
-        });
-      } else if (navAlpha != 1) {
-        setState(() {
-          navAlpha = 1;
-        });
-      }
-    });
-
     page = 1;
     getHotGoods(page);
-  }
-
-  @override
-  void dispose() {
-    scrollController?.dispose();
-    super.dispose();
   }
 
   @override
@@ -78,44 +50,37 @@ class _HomePageState extends State<HomePage>
     super.build(context);
     return Scaffold(
         backgroundColor: Colors.grey[200],
-        body: Stack(children: <Widget>[
-          LoaderContainer(
-            contentView: EasyRefresh.custom(
-                scrollController: scrollController,
-                footer: BallPulseFooter(),
-                onLoad: () async {
-                  page++;
-                  getHotGoods(page);
-                },
-                slivers: <Widget>[
-                  /// 头部banner
-                  _buildSliverAppBar(data?.slides ?? []),
+        body: LoaderContainer(
+          contentView: EasyRefresh.custom(
+              footer: BallPulseFooter(),
+              onLoad: () async {
+                page++;
+                getHotGoods(page);
+              },
+              slivers: <Widget>[
+                /// 头部banner
+                _buildSliverAppBar(data?.slides ?? []),
 
-                  /// 分类
-                  _buildSliverGridCategory(data?.category ?? []),
+                /// 分类
+                _buildSliverGridCategory(data?.category ?? []),
 
-                  /// 广告
-                  _buildSliverToBoxAdapterAds(
-                      data?.advertesPicture, data?.shopInfo, data?.ads),
+                /// 广告
+                _buildSliverToBoxAdapterAds(
+                    data?.advertesPicture, data?.shopInfo, data?.ads),
 
-                  /// 商品推荐
-                  _buildSliverToBoxAdapter('商品推荐'),
-                  _buildSliverGridRecommend(data?.recommend ?? []),
+                /// 商品推荐
+                _buildSliverToBoxAdapter('商品推荐'),
+                _buildSliverGridRecommend(data?.recommend ?? []),
 
-                  /// floor
-                  _buildFloorView(data?.floors ?? []),
+                /// floor
+                _buildFloorView(data?.floors ?? []),
 
-                  /// 火爆专区
-                  _buildHotGoodsTitle(),
-                  _buildHotGoods()
-                ]),
-            loaderState: state,
-          ),
-          ChangeAppBar(
-              title: widget.title,
-              backgroundColor: Colors.red,
-              navAlpha: navAlpha)
-        ]));
+                /// 火爆专区
+                _buildHotGoodsTitle(),
+                _buildHotGoods()
+              ]),
+          loaderState: state,
+        ));
   }
 
   void getHomeData() async {
@@ -123,9 +88,13 @@ class _HomePageState extends State<HomePage>
 
     if (data != null) {
       state = LoaderState.Succeed;
+    } else {
+      state = LoaderState.NoAction;
     }
 
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Widget _buildSliverAppBar(List<Goods> slides) {
@@ -133,6 +102,7 @@ class _HomePageState extends State<HomePage>
         automaticallyImplyLeading: false,
         backgroundColor: Colors.red,
         expandedHeight: headerHeight,
+        title: Text('${widget.title}'),
         flexibleSpace: Container(
             child: Swiper(
                 autoplay: true,
@@ -140,10 +110,8 @@ class _HomePageState extends State<HomePage>
                 itemBuilder: (BuildContext context, int index) => ImageLoadView(
                     '${slides[index].comPic}',
                     height: headerHeight),
-                onTap: (int index) => pushNewPage(
-                    context,
-                    DetailsPage(slides[index].goodsId,
-                        provider: widget.provider)))));
+                onTap: (int index) =>
+                    pushNewPage(context, DetailsPage(slides[index].goodsId)))));
   }
 
   Widget _buildSliverGridCategory(List<Category> category) {
@@ -250,7 +218,6 @@ class _HomePageState extends State<HomePage>
     return SliverGrid(
         delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) => ItemGoodsGrid(recommend[index],
-                provider: widget.provider,
                 height: Utils.width / recommend.length * 2 / 1.45),
             childCount: recommend.length),
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -264,7 +231,6 @@ class _HomePageState extends State<HomePage>
       delegate: SliverChildBuilderDelegate(
           (context, index) => ItemHomeFloor(
                 floor: floors[index],
-                provider: widget.provider,
               ),
           childCount: floors.length),
     );
@@ -289,7 +255,6 @@ class _HomePageState extends State<HomePage>
         delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) => ItemGoodsGrid(
                   goods[index],
-                  provider: widget.provider,
                   height: Utils.width / 1.6,
                 ),
             childCount: goods.length),

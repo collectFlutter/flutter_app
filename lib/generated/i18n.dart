@@ -29,8 +29,10 @@ class S implements WidgetsLocalizations {
   String get cancel_collect => "Cancel Collect";
   String get choice_address => "Choice Address";
   String get choose => "Please Choose";
+  String get clear => "Clear Cache Files";
   String get close => "close";
   String get collect => "Collect";
+  String get complete => "Done";
   String get completeLoad => "Load done";
   String get completeRefresh => "Refresh done";
   String get confirmPassword => "Confirm Password";
@@ -63,7 +65,6 @@ class S implements WidgetsLocalizations {
   String get password => "Password";
   String get password_login => "Password Login";
   String get pick_a_color => "Pick a color!";
-  String get poetry => "Poetry";
   String get pullToRefresh => "Pull to refresh";
   String get pushToLoad => "Pull to load";
   String get quickly_login => "Quickly Login";
@@ -201,13 +202,13 @@ class $zh_HK extends S {
   @override
   String get email => "邮箱";
   @override
-  String get poetry => "詩詞";
-  @override
   String get address => "收貨地址";
   @override
   String get refreshed => "刷新完成";
   @override
   String get pullToRefresh => "拉動刷新";
+  @override
+  String get clear => "清理緩存";
   @override
   String get refresh => "刷新";
   @override
@@ -222,6 +223,8 @@ class $zh_HK extends S {
   String get refreshing => "正在刷新...";
   @override
   String get create_address => "新增地址";
+  @override
+  String get complete => "完成";
   @override
   String get contacts => "通訊錄";
   @override
@@ -343,13 +346,13 @@ class $zh_TW extends S {
   @override
   String get email => "邮箱";
   @override
-  String get poetry => "詩詞";
-  @override
   String get address => "收貨地址";
   @override
   String get refreshed => "刷新完成";
   @override
   String get pullToRefresh => "拉動刷新";
+  @override
+  String get clear => "清理緩存";
   @override
   String get refresh => "刷新";
   @override
@@ -364,6 +367,8 @@ class $zh_TW extends S {
   String get refreshing => "正在刷新...";
   @override
   String get create_address => "新增地址";
+  @override
+  String get complete => "完成";
   @override
   String get contacts => "通訊錄";
   @override
@@ -489,13 +494,13 @@ class $zh_CN extends S {
   @override
   String get email => "邮箱";
   @override
-  String get poetry => "诗词";
-  @override
   String get address => "收货地址";
   @override
   String get refreshed => "刷新完成";
   @override
   String get pullToRefresh => "拉动刷新";
+  @override
+  String get clear => "清理缓存";
   @override
   String get refresh => "刷新";
   @override
@@ -510,6 +515,8 @@ class $zh_CN extends S {
   String get refreshing => "正在刷新...";
   @override
   String get create_address => "新增地址";
+  @override
+  String get complete => "完成";
   @override
   String get contacts => "通讯录";
   @override

@@ -73,7 +73,7 @@ class _SettingPageState extends State<SettingPage> {
                 )),
             Line(
               color: Colors.grey,
-              lineHeight: 10,
+              lineHeight: 5,
             ),
             ExpansionTile(
               leading: Icon(Icons.language),
@@ -101,6 +101,20 @@ class _SettingPageState extends State<SettingPage> {
               ),
               children: _itemColors(),
             ),
+            ListTile(
+                onTap: () async {
+                  String path = await FileUtil.getInstance().getTempPath();
+                  bool success =
+                      await FileUtil.getInstance().deleteFolder(path);
+                  if (success) {
+                    Toast.show(context, '清理完成');
+                  } else {
+                    Toast.show(context, '清理失败');
+                  }
+                },
+                leading: Icon(Icons.delete_forever),
+                title: Text(S.of(context).clear),
+                trailing: Icon(Icons.navigate_next)),
           ]));
     });
   }
@@ -115,19 +129,20 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   void _chooseColor() {
+    var _value = Store.value<ConfigModel>(context, listen: false);
     showDiffDialog(
       context,
       title: Text(S.of(context).pick_a_color),
       content: SingleChildScrollView(
           child: ColorPicker(
-              pickerColor: Color(Store.value<ConfigModel>(context).theme),
+              pickerColor: Color(_value.theme),
               onColorChanged: (color) => setState(() => _pickerColor = color),
               enableLabel: false,
               enableAlpha: false,
               pickerAreaHeightPercent: 0.5)),
       pressed: () {
         if (_pickerColor != null) {
-          Store.value<ConfigModel>(context).setTheme(_pickerColor.value);
+          _value.setTheme(_pickerColor.value);
         }
         Navigator.of(context).pop();
       },
@@ -155,7 +170,7 @@ class _SettingPageState extends State<SettingPage> {
       return ListTile(
           title: Text("${mapSupportLocale[local]}"),
           onTap: () {
-            Store.value<ConfigModel>(context).setLocal(index);
+            Store.value<ConfigModel>(context, listen: false).setLocal(index);
             Navigator.pop(context);
           },
           selected: Store.value<ConfigModel>(context).localIndex == index);
@@ -169,15 +184,17 @@ class _SettingPageState extends State<SettingPage> {
         value: index,
         title: Text("${mapSupportLocale[local]}"),
         onChanged: (index) {
-          Store.value<ConfigModel>(context).setLocal(index);
+          Store.value<ConfigModel>(context, listen: false).setLocal(index);
           //Navigator.pop(context);
         },
-        groupValue: Store.value<ConfigModel>(context).localIndex,
+        groupValue: Store.value<ConfigModel>(context, listen: false).localIndex,
       );
     }).toList();
   }
 
   List<Widget> _itemColors() {
+    var value = Store.value<ConfigModel>(context);
+
     List<Widget> _colors = [
       Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -186,15 +203,13 @@ class _SettingPageState extends State<SettingPage> {
               return Material(
                 color: color,
                 child: InkWell(
-                  onTap: () =>
-                      Store.value<ConfigModel>(context).setTheme(color.value),
+                  onTap: () => value.setTheme(color.value),
                   child: Container(
                     width: 40,
                     height: 40,
-                    child:
-                        Store.value<ConfigModel>(context).theme == color.value
-                            ? Icon(Icons.done)
-                            : SizedBox(),
+                    child: value.theme == color.value
+                        ? Icon(Icons.done)
+                        : SizedBox(),
                   ),
                 ),
               );

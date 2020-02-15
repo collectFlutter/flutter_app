@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 import '../../page_index.dart';
 import '../index.dart';
@@ -23,7 +22,7 @@ class ItemBookListBook extends StatelessWidget {
                     children: <Widget>[
                       Row(children: <Widget>[
                         ImageLoadView('${book?.book?.cover}',
-                            height: 80, width: 60, fit: BoxFit.cover),
+                            height: 80, width: 60),
                         Gaps.hGap5,
                         Expanded(
                             child: Column(
@@ -40,7 +39,7 @@ class ItemBookListBook extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween),
                               Gaps.vGap5,
                               Row(children: <Widget>[
-                                Icon(FontAwesome.user,
+                                Icon(Icons.person,
                                     size: 13, color: Colors.grey),
                                 Gaps.hGap5,
                                 Text('${book?.book?.author}',

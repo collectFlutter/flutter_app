@@ -10,6 +10,52 @@ import 'package:html/parser.dart' show parse;
 import '../page_index.dart';
 
 class ApiService {
+  /// 登录
+  ///
+  /// [email] 邮箱
+  /// [password] 密码
+  ///
+  static Future<User> login(String email, String password) async {
+    Response response = await HttpUtils().request(ApiUrl.LOGIN,
+        data: {'email': email, 'password': password}, method: HttpUtils.POST);
+    if (response != null &&
+        response.statusCode >= 200 &&
+        response.statusCode < 300) {
+      BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+      if (result.code == '0') {
+        return User.fromMap(result.data);
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  /// 修改头像
+  ///
+  /// [data] 数据
+  ///
+  static Future<User> updateAvatar(FormData data) async {
+    Response response =
+        await HttpUtils().uploadFile(ApiUrl.UPDATE_AVATAR, data: data);
+
+    if (response != null &&
+        response.statusCode >= 200 &&
+        response.statusCode < 300) {
+      BaseResult result = BaseResult.fromMap(response.data);
+
+      if (result.code == '0') {
+        return User.fromMap(result.data);
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
   /// 豆瓣电影首页数据
   static Future<MovieHomeData> getMovieHomeData({String city}) async {
     Response response =
@@ -27,7 +73,18 @@ class ApiService {
   }
 
   /// 豆瓣电影年度榜单
+  ///
+  /// [year] 年份
+  ///
   static Future<RangesData> getMovieRanges(int year) async {
+    String data = await FileUtil.getInstance()
+        .readDataFromFile('rank_$year.json', folderPath: '/movie/json/');
+
+    if (data != null && data != "") {
+      BaseResult result = BaseResult.fromMap(json.decode(data));
+      return RangesData.fromMap(result.data);
+    }
+
     Response response =
         await HttpUtils().request(ApiUrl.MOVIE_RANGE_URL, data: {'year': year});
     if (response == null || response?.statusCode != 200) {
@@ -36,6 +93,9 @@ class ApiService {
     BaseResult result = BaseResult.fromMap(json.decode(response.data));
 
     if (result.code == '0') {
+      await FileUtil.getInstance().writeDataToFile(
+          'rank_$year.json', response.data.toString(),
+          folderPath: '/movie/json/');
       return RangesData.fromMap(result.data);
     } else {
       return null;
@@ -1254,7 +1314,7 @@ class ApiService {
     Response response = await HttpUtils(baseUrl: ApiUrl.YOUDAO_BASE_URL)
         .request(ApiUrl.YOUDAO_GROUP_ALL_COURSE_URL,
             data: {"tag": tag, "rank": rank, "time": time});
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
     YoudaoResult result = YoudaoResult.fromMap(json.decode(response.data));
@@ -1283,7 +1343,7 @@ class ApiService {
       "limit": limit,
       "minor": minor
     });
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return [];
     }
 
@@ -1299,11 +1359,11 @@ class ApiService {
   static Future<Books> getBookDetails(String id) async {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL)
         .request(ApiUrl.BOOK_DETAILS_URL, data: {"id": id});
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
 
-    Books book = Books.fromMap(json.decode(response.data));
+    Books book = Books.fromJson(json.decode(response.data));
     return book;
   }
 
@@ -1311,7 +1371,7 @@ class ApiService {
   static Future<List<Books>> getBookByRecommend(String id) async {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL)
         .request(ApiUrl.BOOK_RECOMMEND_URL, data: {"id": id});
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return [];
     }
 
@@ -1329,7 +1389,7 @@ class ApiService {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL).request(
         ApiUrl.BOOK_REVIEW_URL,
         data: {"book": id, "sort": sort, "start": start, "limit": limit});
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
 
@@ -1347,7 +1407,7 @@ class ApiService {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL).request(
         ApiUrl.BOOK_SHORT_REVIEW_URL,
         data: {"book": id, "sort": sort, "start": start, "limit": limit});
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return [];
     }
 
@@ -1373,7 +1433,7 @@ class ApiService {
       "limit": limit,
       "type": type
     });
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return [];
     }
 
@@ -1390,7 +1450,7 @@ class ApiService {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL).request(
         ApiUrl.BOOK_BTOC_URL,
         data: {"book": bookId, 'view': 'summary'});
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
 
@@ -1410,7 +1470,7 @@ class ApiService {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL).request(
         ApiUrl.BOOK_ATOC_URL,
         data: {"sourceId": sourceId, 'view': 'chapters'});
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return [];
     }
 
@@ -1425,7 +1485,7 @@ class ApiService {
   /// 小说章节详情
   static Future<ChapterInfo> getBookChapterInfo(String link) async {
     Response response = await HttpUtils().request(link, data: null);
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
 
@@ -1441,7 +1501,7 @@ class ApiService {
   static Future<RankingResult> getBookRankings() async {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL)
         .request(ApiUrl.BOOK_RANKING_URL, data: null);
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
 
@@ -1457,7 +1517,7 @@ class ApiService {
   static Future<Ranking> getRankingBooks(String rankingId) async {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL)
         .request(ApiUrl.BOOK_RANKING_INFO_URL, data: {"rankingId": rankingId});
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
 
@@ -1473,7 +1533,7 @@ class ApiService {
   static Future<StatisticsResult> getBookStatistics() async {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL)
         .request(ApiUrl.BOOK_STATISTICS_URL, data: null);
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
 
@@ -1490,7 +1550,7 @@ class ApiService {
   static Future<CategoryResult> getBookCategory() async {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL)
         .request(ApiUrl.BOOK_CATEGORY_URL, data: null);
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
 
@@ -1512,7 +1572,7 @@ class ApiService {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL).request(
         ApiUrl.BOOK_SEARCH_URL,
         data: {"query": query, "start": start, "limit": limit});
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return [];
     }
 
@@ -1529,7 +1589,7 @@ class ApiService {
   static Future<List<String>> getSearchHotWords() async {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL)
         .request(ApiUrl.BOOK_HOT_WORDS_URL, data: null);
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return [];
     }
 
@@ -1558,7 +1618,7 @@ class ApiService {
       "start": start,
       "limit": limit
     });
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return [];
     }
 
@@ -1575,7 +1635,7 @@ class ApiService {
   static Future<BookList> getBookListInfo(String booklistId) async {
     Response response = await HttpUtils(baseUrl: ApiUrl.BOOK_URL)
         .request(ApiUrl.BOOK_LIST_INFO_URL, data: {"booklistId": booklistId});
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
 
@@ -1592,7 +1652,7 @@ class ApiService {
   static Future<Hitokoto> hitokoto() async {
     Response response =
         await HttpUtils(baseUrl: ApiUrl.HITOKOTO_URL).request('', data: null);
-    if (response.statusCode != 200) {
+    if (response?.statusCode != 200) {
       return null;
     }
 
@@ -1673,6 +1733,343 @@ class ApiService {
       return TuBiTV.fromMap(result.data);
     } else {
       return null;
+    }
+  }
+
+  /// NBA赛季赛程
+  ///
+  /// [startTime] 开始日期
+  /// [endTime] 结束日期
+  ///
+  static Future<List<Schedule>> getNBASchedule(
+      {String startTime, String endTime}) async {
+    Response response = await HttpUtils().request(ApiUrl.NBA_SCHEDULE,
+        data: {'startTime': startTime, 'endTime': endTime});
+    if (response == null || response?.statusCode != 200) {
+      return [];
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return List()
+        ..addAll((result.data as List ?? []).map((o) => Schedule.fromMap(o)));
+    } else {
+      return [];
+    }
+  }
+
+  /// NBA球队赛季赛程
+  ///
+  /// [id] 球队ID
+  ///
+  static Future<List<Schedule>> getTeamSchedule({String id}) async {
+    Response response =
+        await HttpUtils().request(ApiUrl.TEAM_SCHEDULE, data: {'id': id});
+    if (response == null || response?.statusCode != 200) {
+      return [];
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return List()
+        ..addAll((result.data as List ?? []).map((o) => Schedule.fromMap(o)));
+    } else {
+      return [];
+    }
+  }
+
+  /// NBA球队赛季阵容
+  ///
+  /// [id] 球队ID
+  ///
+  static Future<List<Player>> getTeamRoster({String id}) async {
+    Response response =
+        await HttpUtils().request(ApiUrl.TEAM_ROSTER, data: {'id': id});
+    if (response == null || response?.statusCode != 200) {
+      return [];
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return List()
+        ..addAll((result.data as List ?? []).map((o) => Player.fromMap(o)));
+    } else {
+      return [];
+    }
+  }
+
+  /// 球队赛季排名
+  ///
+  static Future<List<RankBase>> getTeamRank() async {
+    Response response = await HttpUtils().request(ApiUrl.TEAM_RANK, data: null);
+    if (response == null || response?.statusCode != 200) {
+      return [];
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return List()
+        ..addAll((result.data as List ?? []).map((o) => RankBase.fromMap(o)));
+    } else {
+      return [];
+    }
+  }
+
+  /// 球员赛季数据排行前N（）
+  ///
+  /// [year] 赛季
+  /// [type] 类型 1:常规赛;2:季后赛;0:季前赛
+  /// [limit] 返回前多少名
+  ///
+  static Future<PlayerSeasonRank> getPlayerRankTopN(
+      {int year: 2019, int type: 1, int limit: 10}) async {
+    Response response = await HttpUtils().request(ApiUrl.PLAYER_RANNGE,
+        data: {'year': year, 'type': type, 'limit': limit});
+    if (response == null || response?.statusCode != 200) {
+      return null;
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return PlayerSeasonRank.fromMap(result.data);
+    } else {
+      return null;
+    }
+  }
+
+  /// 球员赛季数据排行(全)
+  ///
+  /// [year] 赛季
+  /// [type] 类型 1:常规赛;2:季后赛;0:季前赛
+  /// [page] 页码
+  /// [limit] 每页条数
+  /// [sort] 排序方式 得分 t70；出手数 t83；命中率 t79；三分出手 t85；三分命中率 t80；罚球次数 t87；发球命中率 t81；篮板 t71；前场篮板 t77；后场篮板 t76；助攻 t68；抢断 t72；盖帽 t69；失误 t74；犯规 t73；场次 t5；上场时间 t78
+  ///
+  static Future<List<SeasonDataStat>> getPlayerRankAll(
+      {int year: 2019,
+      int type: 1,
+      int page: 1,
+      int limit: 50,
+      String sort: 't70'}) async {
+    Response response = await HttpUtils().request(ApiUrl.PLAYER_RANNGE_ALL,
+        data: {
+          'year': year,
+          'type': type,
+          'page': page,
+          'limit': limit,
+          'sort': sort
+        });
+    if (response == null || response?.statusCode != 200) {
+      return [];
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return List()
+        ..addAll(
+            (result.data as List ?? []).map((o) => SeasonDataStat.fromMap(o)));
+    } else {
+      return [];
+    }
+  }
+
+  /// 球员详情
+  ///
+  /// [id] 球员ID
+  ///
+  static Future<StatsBase> getPlayerDetails({String id}) async {
+    Response response = await HttpUtils()
+        .request(ApiUrl.PLAYER_DETAIL, data: {'id': id, 'year': 2019});
+    if (response == null || response?.statusCode != 200) {
+      return null;
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return StatsBase.fromMap(result.data);
+    } else {
+      return null;
+    }
+  }
+
+  /// 球员详情
+  ///
+  /// [id] 球员ID
+  ///
+  static Future<StatsBase> getPlayerInfo({String id}) async {
+    Response response =
+        await HttpUtils().request(ApiUrl.PLAYER_INFO, data: {'id': id});
+    if (response == null || response?.statusCode != 200) {
+      return null;
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return StatsBase.fromMap(result.data);
+    } else {
+      return null;
+    }
+  }
+
+  /// 球队赛季数据排行(全)
+  ///
+  /// [year] 赛季
+  /// [type] 类型 1:常规赛;2:季后赛;0:季前赛
+  ///
+  static Future<List<SeasonDataStat>> getTeamRankAll(
+      {int year: 2019, int type: 1}) async {
+    Response response = await HttpUtils()
+        .request(ApiUrl.TEAM_RANNGE_ALL, data: {'year': year, 'type': type});
+    if (response == null || response?.statusCode != 200) {
+      return [];
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return List()
+        ..addAll(
+            (result.data as List ?? []).map((o) => SeasonDataStat.fromMap(o)));
+    } else {
+      return [];
+    }
+  }
+
+  /// 球员职业生涯赛季数据统计（包括季前赛、常规赛、季后赛）
+  ///
+  /// [id] 球员ID
+  ///
+  static Future<List<SeasonDataStat>> getPlayerCareer(String id) async {
+    Response response =
+        await HttpUtils().request(ApiUrl.PLAYER_CAREER, data: {'id': id});
+    if (response == null || response?.statusCode != 200) {
+      return [];
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return List()
+        ..addAll(
+            (result.data as List ?? []).map((o) => SeasonDataStat.fromMap(o)));
+    } else {
+      return [];
+    }
+  }
+
+  /// 球员赛季每场比赛数据统计（包括季前赛、常规赛、季后赛）
+  ///
+  /// [id] 球员ID
+  /// [year] 赛季
+  /// [type] 类型 1:常规赛;2:季后赛;0:季前赛
+  ///
+  static Future<List<PlayerMatch>> getPlayerMatch(String id,
+      {int year: 2019, int type: 1}) async {
+    Response response = await HttpUtils().request(ApiUrl.PLAYER_MATCH,
+        data: {'year': year, 'type': type, 'id': id});
+    if (response == null || response?.statusCode != 200) {
+      return [];
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return List()
+        ..addAll(
+            (result.data as List ?? []).map((o) => PlayerMatch.fromMap(o)));
+    } else {
+      return [];
+    }
+  }
+
+  /// NBA最新动态
+  ///
+  /// [name] 球员名字or球队名称
+  ///
+  static Future<List<NBANews>> getNBANews(String name) async {
+    Response response =
+        await HttpUtils().request(ApiUrl.NBA_NEWS, data: {'name': name});
+    if (response == null || response?.statusCode != 200) {
+      return [];
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return List()
+        ..addAll((result.data as List ?? []).map((o) => NBANews.fromMap(o)));
+    } else {
+      return [];
+    }
+  }
+
+  /// 球队详情
+  ///
+  /// [id] 球队ID
+  ///
+  static Future<Team> getTeamInfo(String id) async {
+    Response response =
+        await HttpUtils().request(ApiUrl.TEAM_INFO, data: {'id': id});
+    if (response == null || response?.statusCode != 200) {
+      return null;
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return Team.fromMap(result.data);
+    } else {
+      return null;
+    }
+  }
+
+  /// 比赛数据统计详情
+  ///
+  /// [mid] 球队ID
+  ///
+  static Future<MatchBaseBean> getMatchStats(String mid) async {
+    Response response =
+        await HttpUtils().request(ApiUrl.MATCH_STATS, data: {'mid': mid});
+    if (response == null || response?.statusCode != 200) {
+      return null;
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return MatchBaseBean.fromMap(result.data);
+    } else {
+      return null;
+    }
+  }
+
+  /// 球队数据概况
+  ///
+  /// [id] 球队ID
+  ///
+  static Future<StatsBase> getTeamStats({String id}) async {
+    Response response =
+        await HttpUtils().request(ApiUrl.TEAM_STATS, data: {'id': id});
+    if (response == null || response?.statusCode != 200) {
+      return null;
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return StatsBase.fromMap(result.data);
+    } else {
+      return null;
+    }
+  }
+
+  /// 音乐列表
+  ///
+  static Future<List<Song>> getMusics() async {
+    Response response = await HttpUtils().request(ApiUrl.MUSIC, data: null);
+    if (response == null || response?.statusCode != 200) {
+      return [];
+    }
+    BaseResult result = BaseResult.fromMap(json.decode(response.data));
+
+    if (result.code == '0') {
+      return List()
+        ..addAll((result.data as List ?? []).map((o) => Song.fromMap(o)));
+    } else {
+      return [];
     }
   }
 }

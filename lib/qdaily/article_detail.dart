@@ -102,7 +102,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         height: Utils.navigationBarHeight - Utils.topSafeHeight)
                   ]),
                 )
-              : getLoadingWidget(),
+              : LoadingWidget(),
           BottomAppbar(actions: <Widget>[
             IconButton(
                 icon: Badge(
@@ -268,6 +268,6 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
     detailBean = await ApiService.getQDailyArticleData(id);
 
-    setState(() {});
+    if (mounted) setState(() {});
   }
 }

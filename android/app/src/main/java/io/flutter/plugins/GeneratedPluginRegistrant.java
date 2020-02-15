@@ -1,15 +1,17 @@
 package io.flutter.plugins;
 
 import io.flutter.plugin.common.PluginRegistry;
-import me.yohom.amapbaselocation.AMapBaseLocationPlugin;
+import me.yohom.amap_core_fluttify.AmapCoreFluttifyPlugin;
+import me.yohom.amap_location_fluttify.AmapLocationFluttifyPlugin;
 import xyz.luan.audioplayers.AudioplayersPlugin;
 import com.apptreesoftware.barcodescan.BarcodeScanPlugin;
-import com.example.citypickers.CityPickersPlugin;
 import net.goderbauer.flutter.contactpicker.ContactPickerPlugin;
 import io.flutter.plugins.deviceinfo.DeviceInfoPlugin;
 import com.chingsoft.flutter_jd_address_selector.FlutterJdAddressSelectorPlugin;
+import io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin;
 import com.dooboolab.fluttersound.FlutterSoundPlugin;
 import com.flutter_webview_plugin.FlutterWebviewPlugin;
+import me.yohom.foundation_fluttify.FoundationFluttifyPlugin;
 import vn.hunghd.flutter.plugins.imagecropper.ImageCropperPlugin;
 import com.example.imagegallerysaver.ImageGallerySaverPlugin;
 import io.flutter.plugins.imagepicker.ImagePickerPlugin;
@@ -33,15 +35,17 @@ public final class GeneratedPluginRegistrant {
     if (alreadyRegisteredWith(registry)) {
       return;
     }
-    AMapBaseLocationPlugin.registerWith(registry.registrarFor("me.yohom.amapbaselocation.AMapBaseLocationPlugin"));
+    AmapCoreFluttifyPlugin.registerWith(registry.registrarFor("me.yohom.amap_core_fluttify.AmapCoreFluttifyPlugin"));
+    AmapLocationFluttifyPlugin.registerWith(registry.registrarFor("me.yohom.amap_location_fluttify.AmapLocationFluttifyPlugin"));
     AudioplayersPlugin.registerWith(registry.registrarFor("xyz.luan.audioplayers.AudioplayersPlugin"));
     BarcodeScanPlugin.registerWith(registry.registrarFor("com.apptreesoftware.barcodescan.BarcodeScanPlugin"));
-    CityPickersPlugin.registerWith(registry.registrarFor("com.example.citypickers.CityPickersPlugin"));
     ContactPickerPlugin.registerWith(registry.registrarFor("net.goderbauer.flutter.contactpicker.ContactPickerPlugin"));
     DeviceInfoPlugin.registerWith(registry.registrarFor("io.flutter.plugins.deviceinfo.DeviceInfoPlugin"));
     FlutterJdAddressSelectorPlugin.registerWith(registry.registrarFor("com.chingsoft.flutter_jd_address_selector.FlutterJdAddressSelectorPlugin"));
+    FlutterAndroidLifecyclePlugin.registerWith(registry.registrarFor("io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin"));
     FlutterSoundPlugin.registerWith(registry.registrarFor("com.dooboolab.fluttersound.FlutterSoundPlugin"));
     FlutterWebviewPlugin.registerWith(registry.registrarFor("com.flutter_webview_plugin.FlutterWebviewPlugin"));
+    FoundationFluttifyPlugin.registerWith(registry.registrarFor("me.yohom.foundation_fluttify.FoundationFluttifyPlugin"));
     ImageCropperPlugin.registerWith(registry.registrarFor("vn.hunghd.flutter.plugins.imagecropper.ImageCropperPlugin"));
     ImageGallerySaverPlugin.registerWith(registry.registrarFor("com.example.imagegallerysaver.ImageGallerySaverPlugin"));
     ImagePickerPlugin.registerWith(registry.registrarFor("io.flutter.plugins.imagepicker.ImagePickerPlugin"));

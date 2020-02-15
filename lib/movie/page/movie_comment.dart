@@ -69,12 +69,12 @@ class _MovieCommentPageState extends State<MovieCommentPage> {
 
     comments.addAll(reviews);
 
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   Widget _buildBodyView() {
     if (isFirst && comments.isEmpty) {
-      return getLoadingWidget();
+      return LoadingWidget();
     }
     return EasyRefresh(
       footer: BallPulseFooter(),

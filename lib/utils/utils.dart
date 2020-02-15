@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui show window;
 
 import 'package:flutter/services.dart';
+import 'package:flutter_app/bean/music.dart';
 
 import 'package:palette_generator/palette_generator.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,15 +16,19 @@ class Utils {
 
   static bool get isIOS => Platform.isIOS;
 
-  /// 文字转颜色
-  static Color strToColor(String name) {
-    assert(name.length > 1);
-    final int hash = name.hashCode & 0xffff;
+  /// 字符串转颜色
+  ///
+  /// [string] 字符串
+  ///
+  static Color strToColor(String string) {
+    assert(string.length > 1);
+    final int hash = string.hashCode & 0xffff;
     final double hue = (360.0 * hash / (1 << 15)) % 360.0;
     return HSVColor.fromAHSV(1.0, hue, 0.4, 0.90).toColor();
   }
 
   /// 随机颜色
+  ///
   static Color randomRGB() {
     return Color.fromARGB(255, Random().nextInt(255), Random().nextInt(255),
         Random().nextInt(255));
@@ -35,34 +40,59 @@ class Utils {
         random.nextInt(255), random.nextInt(255));
   }
 
+  /// 生成随机串
+  ///
+  /// [len] 字符串长度
+  ///
+  static String randomString(int len) {
+    String character = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
+    String left = '';
+    for (var i = 0; i < len; i++) {
+      left = left + character[Random().nextInt(character.length)];
+    }
+    return left;
+  }
+
   /// 屏幕宽
+  ///
   static double get width {
     MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
     return mediaQuery.size.width;
   }
 
   /// RPX 用于屏幕适配（比例适配）
+  ///
   static double get rpx {
     MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
     return mediaQuery.size.width / 750;
   }
 
   /// 屏幕高
+  ///
   static double get height {
     MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
     return mediaQuery.size.height;
   }
 
   /// 标题栏高度（包括状态栏）
+  ///
   static double get navigationBarHeight {
     MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
     return mediaQuery.padding.top + kToolbarHeight;
   }
 
   /// 状态栏高度
+  ///
   static double get topSafeHeight {
     MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
     return mediaQuery.padding.top;
+  }
+
+  /// 底部状态栏高度
+  ///
+  static double get bottomSafeHeight {
+    MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
+    return mediaQuery.padding.bottom;
   }
 
   static updateStatusBarStyle(SystemUiOverlayStyle style) {
@@ -70,6 +100,7 @@ class Utils {
   }
 
   /// 复制到剪粘板
+  ///
   static copyToClipboard(String text) {
     if (text == null) return;
     Clipboard.setData(new ClipboardData(text: text));
@@ -78,6 +109,7 @@ class Utils {
   static const RollupSize_Units = ["GB", "MB", "KB", "B"];
 
   /// 返回文件大小字符串
+  ///
   static String getRollupSize(int size) {
     int idx = 3;
     int r1 = 0;
@@ -146,7 +178,11 @@ class Utils {
     if (email == null) return false;
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = RegExp(pattern);
+    RegExp regex = RegExp(
+      pattern,
+      caseSensitive: false,
+      multiLine: false,
+    );
     return regex.hasMatch(email);
   }
 
@@ -158,12 +194,28 @@ class Utils {
     return regex.hasMatch(amount);
   }
 
+  /// 校验密码
+  ///
+  bool validatePassword(String password) {
+    if (password.length < 6 ||
+        !password.contains(RegExp(r'[A-z]')) ||
+        !password.contains(RegExp(r'[0-9]'))) {
+      return false;
+    }
+    return true;
+  }
+
   /// 时间转字符串
   ///
   static String duration2String(Duration duration) {
     return duration?.toString()?.split('.')?.first ?? '0:00:00';
   }
 
+  /// 16进制颜色值转换为10进制值
+  ///
+  /// [colorStr] 颜色值 #FFEE22
+  /// [alpha] 透明度（16进制）
+  ///
   static int getColorHexFromStr(String colorStr, {String alpha: "FF"}) {
     if (colorStr == null) {
       return 0;
@@ -192,6 +244,7 @@ class Utils {
   }
 
   /// 隐藏键盘
+  ///
   /// [context] 上下文
   ///
   static void hideKeyboard(BuildContext context) {
@@ -199,6 +252,7 @@ class Utils {
   }
 
   /// 状态栏状态
+  ///
   /// [enable] true为显示；false为隐藏
   ///
   static void statusBarEnable(bool enable) {

@@ -19,15 +19,6 @@ class HomeDrawable extends StatelessWidget {
           HomeDrawableHeader(),
           Divider(),
           ListTile(
-              title: Text("${S.of(context).poetry}"),
-              leading: Icon(Icons.book),
-              trailing: Icon(Icons.chevron_right),
-              onTap: () {
-                Navigator.of(context).pop();
-                pushNewPageBack(context, RandomPoetryPage());
-              }),
-          Divider(),
-          ListTile(
               title: Text(S.of(context).contact),
               leading: Icon(Icons.supervisor_account),
               trailing: Icon(Icons.chevron_right),
@@ -41,16 +32,18 @@ class HomeDrawable extends StatelessWidget {
               leading: Icon(Icons.update),
               trailing: Icon(Icons.chevron_right),
               onTap: () async {
-                var appDocDir = await FileUtil.getInstance().getTempPath();
+                var apkPath =
+                    await FileUtil.getInstance().getFolderPath('/apk/');
 
                 Navigator.of(context).pop();
                 showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => UpdateDialog(
-                        url:
-                            'https://cdn.jsdelivr.net/gh/flutterchina/flutter-in-action@1.0/docs/imgs/book.jpg',
-                        savePath: appDocDir + "temp.jpg"));
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => UpdateDialog(
+                      url:
+                          'https://qd.myapp.com/myapp/qqteam/AndroidQQi/qq_6.0.1.6600_android_r25029_GuanWang_537057608_release.apk',
+                      savePath: apkPath + "temp.apk"),
+                );
               }),
           Divider(),
           ListTile(
@@ -58,15 +51,9 @@ class HomeDrawable extends StatelessWidget {
               leading: Icon(Icons.exit_to_app),
               trailing: Icon(Icons.chevron_right),
               onTap: () {
+                Store.value<UserModel>(context, listen: false).cleanUserInfo();
                 Navigator.of(context).pop();
-                showDiffDialog(context,
-                    title: Text("退出账号"),
-                    content: Text("您确定要退出账号吗？"),
-                    noText: '再想想',
-                    yesText: '退出', pressed: () {
-                  Store.value<UserModel>(context).cleanUserInfo();
-                  pushAndRemovePage(context, LoginPage());
-                });
+                pushAndRemovePage(context, LoginPage());
               }),
           Divider(),
           ListTile(

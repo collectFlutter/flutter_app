@@ -11,7 +11,7 @@ class MovieCelebrityPage extends StatefulWidget {
 
   MovieCelebrityPage({
     Key key,
-    this.id,
+    @required this.id,
     this.name,
   }) : super(key: key);
 
@@ -26,9 +26,6 @@ class _MovieCelebrityPageState extends State<MovieCelebrityPage> {
 
   bool isSummaryUnfold = false;
 
-  String defaultBgImageUrl =
-      'http://pic36.nipic.com/20131206/15190732_161014639124_2.png';
-
   @override
   void initState() {
     super.initState();
@@ -37,16 +34,11 @@ class _MovieCelebrityPageState extends State<MovieCelebrityPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (null == celebrity) {
       return Scaffold(
         backgroundColor: pageColor,
-        body: getLoadingWidget(),
+        body: LoadingWidget(),
       );
     } else {
       List<Movie> movies = celebrity.subjects;
@@ -68,8 +60,9 @@ class _MovieCelebrityPageState extends State<MovieCelebrityPage> {
         body: CustomScrollView(slivers: <Widget>[
           MovieCelebrityHeader(
             widget.name,
-            backgroundImageUrl:
-                celebrity?.photos?.first?.cover ?? defaultBgImageUrl,
+            backgroundImageUrl: celebrity.photos.length > 0
+                ? celebrity?.photos?.first?.cover
+                : backgroundImage,
             pageColor: pageColor,
             avatarUrl: celebrity.avatars.medium.toString(),
             gender:
@@ -184,7 +177,7 @@ class _MovieCelebrityPageState extends State<MovieCelebrityPage> {
           celebrity?.avatars?.small ?? douBanDefaultImage);
     }
 
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   /// 展开 or 收起

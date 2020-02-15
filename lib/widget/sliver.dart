@@ -136,7 +136,6 @@ class _SliverPageState extends State<SliverPage>
                         child: Swiper(
                             itemBuilder: (context, index) => ImageLoadView(
                                   bannerImages[index],
-                                  fit: BoxFit.cover,
                                 ),
                             itemCount: 4,
                             pagination: SwiperPagination(
@@ -233,7 +232,9 @@ class BottomGridViewState extends State<BottomGridView>
     images = [];
     images = await ApiService.getImagesData(key);
 
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override

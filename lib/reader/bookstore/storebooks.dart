@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 import '../../page_index.dart';
 import '../index.dart';
@@ -56,21 +55,20 @@ class _StoreBooksPageState extends State<StoreBooksPage>
                       Expanded(
                           child: IconText(
                               text: '分类',
-                              icon: Icon(SimpleLineIcons.grid,
+                              icon: Icon(Icons.dashboard,
                                   color: Colors.blueAccent),
                               onPressed: () {})),
                       Expanded(
                         child: IconText(
                             text: '排行',
-                            icon: Icon(SimpleLineIcons.trophy,
-                                color: Colors.green),
+                            icon: Icon(Icons.equalizer, color: Colors.green),
                             onPressed: () =>
                                 pushNewPage(context, RankingsPage())),
                       ),
                       Expanded(
                         child: IconText(
                             text: '书单',
-                            icon: Icon(SimpleLineIcons.docs,
+                            icon: Icon(Icons.insert_drive_file,
                                 color: Colors.pinkAccent),
                             onPressed: () =>
                                 pushNewPage(context, BookListPage())),
@@ -78,8 +76,7 @@ class _StoreBooksPageState extends State<StoreBooksPage>
                       Expanded(
                         child: IconText(
                             text: '漫画',
-                            icon: Icon(SimpleLineIcons.picture,
-                                color: Colors.purple),
+                            icon: Icon(Icons.photo, color: Colors.purple),
                             onPressed: () =>
                                 pushNewPage(context, PicturePage())),
                       )
@@ -88,9 +85,8 @@ class _StoreBooksPageState extends State<StoreBooksPage>
                     padding: EdgeInsets.all(10),
                     child: Swiper(
                         autoplay: widget.banners.length > 1,
-                        itemBuilder: (_, index) => ImageLoadView(
-                            widget.banners[index].cover,
-                            fit: BoxFit.cover),
+                        itemBuilder: (_, index) =>
+                            ImageLoadView(widget.banners[index].cover),
                         itemCount: widget.banners.length,
                         onTap: (index) => pushNewPage(
                             context,
@@ -111,8 +107,9 @@ class _StoreBooksPageState extends State<StoreBooksPage>
                                             size: const Size.square(5.0),
                                             activeSize: const Size(10.0, 5.0),
                                             activeShape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(
-                                                    2.5))))))),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        2.5))))))),
                     height: (Utils.width - 20) / 69 * 28 + 20),
                 ListView.separated(
                     physics: NeverScrollableScrollPhysics(),
@@ -146,6 +143,8 @@ class _StoreBooksPageState extends State<StoreBooksPage>
 
     _books.addAll(_list);
     _status = LoaderState.Succeed;
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 }

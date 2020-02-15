@@ -103,50 +103,48 @@ class WeatherPageState extends State<WeatherPage> {
       body: Stack(children: <Widget>[
         Image.asset(background, fit: BoxFit.fitHeight, height: double.infinity),
         _buildContentView(),
-        Container(
-            height: Utils.navigationBarHeight,
-            child: AppBar(
-                centerTitle: true,
-                title: GestureDetector(
-                  child: Row(children: <Widget>[
-                    Text('$title', style: TextStyle(fontSize: 17.0)),
-                    Icon(Icons.keyboard_arrow_down)
-                  ], mainAxisSize: MainAxisSize.min),
-                  onTap: () => pushNewPage(
-                    context,
-                    CityPage(),
-                    callBack: (value) {
-                      if (value != null && title != value) {
-                        weather = null;
-                        airData = null;
+        CustomAppBar(
+          iconColor: Colors.white,
+          bgColor: Color.fromARGB((navAlpha * 255 * 0.8).toInt(), barColor.red,
+              barColor.green, barColor.blue),
+          title: GestureDetector(
+            child: Row(children: <Widget>[
+              Text('$title',
+                  style: TextStyle(fontSize: 18.0, color: Colors.white)),
+              Icon(Icons.keyboard_arrow_down, color: Colors.white)
+            ], mainAxisSize: MainAxisSize.min),
+            onTap: () => pushNewPage(
+              context,
+              CityPage(),
+              callBack: (value) {
+                if (value != null && title != value) {
+                  weather = null;
+                  airData = null;
 
-                        setState(() {
-                          title = value;
-                        });
-                        _getWeather(title);
-                      }
-                    },
-                  ),
-                ),
-                elevation: 0.0,
-                backgroundColor: Color.fromARGB((navAlpha * 255 * 0.8).toInt(),
-                    barColor.red, barColor.green, barColor.blue),
-                actions: <Widget>[
-                  LikeButton(
-                    size: 65,
-                    normalColor: Colors.white,
-                    onClicked: (bool isLiked) {
-                      favorite = isLiked;
-                    },
-                  )
-                ]))
+                  setState(() {
+                    title = value;
+                  });
+                  _getWeather(title);
+                }
+              },
+            ),
+          ),
+          centerTitle: false,
+          action: LikeButton(
+            size: 65,
+            normalColor: Colors.white,
+            onClicked: (bool isLiked) {
+              favorite = isLiked;
+            },
+          ),
+        ),
       ]),
     );
   }
 
   Widget _buildContentView() {
     if (null == weather || airData == null) {
-      return getLoadingWidget();
+      return LoadingWidget();
     }
     return RefreshIndicator(
         child: SingleChildScrollView(

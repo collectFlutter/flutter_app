@@ -1,8 +1,7 @@
 ![](https://github.com/shichunlei/flutter_app/blob/master/FlutterApp.png)
 
 # FlutterApp
-
-A new Flutter application.
+  FLutter各种项目学习文档,帮助你快速构建一个Flutter项目及功能点
 
 ## Android APK 下载地址
 
@@ -14,11 +13,16 @@ A new Flutter application.
 `声明2：本项目中部分功能页面是别人其他项目中的，但是本人并不是完全照抄原作者代码，再此也特别感谢原作者，部分参考别人页面的功能也已标注出原出处，如有侵犯原作者的地方请联系本人进行删除。`
 
 
-## 联系我
+## 联系我们
+### QQ群：691819454
 
+![](https://github.com/shichunlei/flutter_app/blob/master/screenshots/QQ图片20200121110501.png)
+    
     手机号码：18601952581（微信同号）
     QQ：1558053958
     邮箱：1558053958@qq.com
+    
+    
 
 
 ## 本项目包括：
@@ -31,11 +35,11 @@ A new Flutter application.
 ## 运行环境
 
 ```
-[✓] Flutter (Channel beta, v1.10.7, on Mac OS X 10.14.5 18F132, locale zh-Hans-CN)
-    • Flutter version 1.10.7 at /Users/14cells/Android/flutter
-    • Framework revision e70236e36c (8 weeks ago), 2019-10-02 09:32:30 -0700
-    • Engine revision 9e6314d348
-    • Dart version 2.6.0 (build 2.6.0-dev.0.0 1103600280)
+[✓] Flutter (Channel beta, v1.12.13+hotfix.6, on Mac OS X 10.14.5 18F132, locale zh-Hans-CN)
+    • Flutter version 1.12.13+hotfix.6 at /Users/14cells/Android/flutter
+    • Framework revision 18cd7a3601 (8 days ago), 2019-12-11 06:35:39 -0800
+    • Engine revision 2994f7e1e6
+    • Dart version 2.7.0
 
 [✓] Android toolchain - develop for Android devices (Android SDK version 29.0.2)
     • Android SDK at /Users/14cells/Android/SDK
@@ -52,7 +56,7 @@ A new Flutter application.
 
 [✓] Android Studio (version 3.5)
     • Android Studio at /Applications/Android Studio.app/Contents
-    • Flutter plugin version 40.2.2
+    • Flutter plugin version 42.1.1
     • Dart plugin version 191.8593
     • Java version OpenJDK Runtime Environment (build 1.8.0_202-release-1483-b49-5587405)
 
@@ -64,8 +68,7 @@ A new Flutter application.
 #### 注意事项
 
 
-- 高德定位ios设备的apikey没有配置，使用ios设备的朋友们可以自己去高德地图申请apikey，ios具体配置见[高德地图flutter插件](https://github.com/OpenFlutter/amap_base_flutter)配置。
-- 音乐🎵播放器[Music Player](https://github.com/shichunlei/flutter_app/blob/master/lib/music_player/flute_music_player.dart)暂不支持ios设备，详情请见插件[Flute-Music-Player](https://github.com/iampawan/Flute-Music-Player)。
+- 高德地图定位失败可能是key导致的，使用者可以自己到高德地图开发者平台申请一个key再次试一试。
 - Multi Image Picker 插件 ios 配置见[Multi Image Picker 使用](https://sh1d0w.github.io/multi_image_picker/#/gettingstarted)
 
 
@@ -123,8 +126,27 @@ __iOS__
 
 - [追书神器接口>>](https://github.com/shichunlei/-Api/blob/master/%E8%BF%BD%E4%B9%A6%E7%A5%9E%E5%99%A8.md)
 
+- [NBA接口](https://documenter.getpostman.com/view/8783043/SW7Z4p87?version=latest#84a6d27c-8be1-46f4-869a-c1c533f35742)
 
 ## 运行截图
+
+
+
+### 仿腾讯体育NBA板块
+
+
+|![1](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1181574224573_.pic.jpg)|![2](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1231574224580_.pic.jpg)|![3](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1241574224582_.pic.jpg)|![4](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1291574224590_.pic.jpg)|
+| :--: | :--: | :--: | :--: |
+|赛程|排名|球员数据排名|球队数据排名|
+|![1](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1441574933325_.pic.jpg)|![2](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1221574224579_.pic.jpg)|![3](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1191574224574_.pic.jpg)|![4](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1281574224588_.pic.jpg)|
+|球队数据|球队阵容|球队赛程|球队简介|
+|![1](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1421574933322_.pic.jpg)|![2](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1431574933324_.pic.jpg)|![3](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1211574224577_.pic.jpg)|![4](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1271574224587_.pic.jpg)|
+|球员数据|球员生涯数据|球员比赛数据|球员简介|
+|![1](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1261574224586_.pic.jpg)|![2](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1251574224584_.pic.jpg)|![3](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1201574224576_.pic.jpg)|![4]()|
+|球员新闻|球队新闻|同位置球员|XXX|
+|![1](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1351574327761_.pic.jpg)|![2](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1341574327759_.pic.jpg)|![3](https://github.com/shichunlei/flutter_app/blob/master/screenshots/1331574327758_.pic.jpg)|![4]()|
+|比赛详情-比分|比赛详情-球队数据统计|比赛详情-球员数据统计|XXX|
+
 
 
 ### [基本控件（Widget）及一些自定义控件（Widget）](https://github.com/shichunlei/flutter_app/blob/master/BASE_WIDGETS.md)
@@ -280,6 +302,19 @@ __iOS__
 
 |![1](https://github.com/shichunlei/flutter_app/blob/master/admire-for/771564454769_.pic.jpg)|![2](https://github.com/shichunlei/flutter_app/blob/master/admire-for/801564454769_.pic.jpg)|![3](https://github.com/shichunlei/flutter_app/blob/master/admire-for/761564454769_.pic_hd.jpg)|![4](https://github.com/shichunlei/flutter_app/blob/master/admire-for/821564454769_.pic.jpg)|
 | :--: | :--: | :--: | :--: |
+
+
+## 特别鸣谢
+
+
+- [simplezhli/flutter_deer](https://github.com/simplezhli/flutter_deer)
+- [jsososo/QQMusicApi](https://github.com/jsososo/QQMusicApi)
+- [huanxsd/flutter_shuqi](https://github.com/huanxsd/flutter_shuqi)
+- [fluttercandies/NeteaseCloudMusic](https://github.com/fluttercandies/NeteaseCloudMusic)
+- [ditclear/tiktok_gestures](https://github.com/ditclear/tiktok_gestures)
+- [Mayandev/morec](https://github.com/Mayandev/morec)
+- [chengww5217/one_article](https://github.com/chengww5217/one_article)
+- [shenghy/flutter_shop](https://github.com/shenghy/flutter_shop)
 
 
 

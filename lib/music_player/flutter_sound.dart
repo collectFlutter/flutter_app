@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_app/bean/music.dart';
+import 'index.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 import '../page_index.dart';
-import 'widgets/cd_view.dart';
 
 class FlutterSoundPage extends StatefulWidget {
   FlutterSoundPage({Key key}) : super(key: key);
@@ -46,14 +45,15 @@ class _FlutterSoundPageState extends State<FlutterSoundPage>
   String get maxDurationTxt =>
       Utils.duration2String(Duration(milliseconds: maxDuration.toInt()));
 
+  List<Song> songs = [];
+
   @override
   void initState() {
     super.initState();
-    _name = songsData?.first?.title;
-    _artists = songsData?.first?.artists;
-
     _controller =
         AnimationController(duration: Duration(seconds: 15), vsync: this);
+
+    getSongs();
   }
 
   @override
@@ -70,112 +70,122 @@ class _FlutterSoundPageState extends State<FlutterSoundPage>
     return Scaffold(
         backgroundColor: Colors.grey[200],
         appBar: AppBar(title: Text('Flutter Sound')),
-        body: Column(children: <Widget>[
-          /// cd
-          Container(
-              height: 300.0,
-              child: Swiper(
-                  itemBuilder: (BuildContext context, int index) =>
-                      AnimatedCDView(
-                          animation: _controller,
-                          imageUrl: songsData[index].albumArtUrl),
-                  onIndexChanged: (i) => setState(() {
-                        onTop = i;
-                        _name = songsData[i].title;
-                        _artists = songsData[i].artists;
-                        startPlay();
-                      }),
-                  itemCount: songsData.length,
-                  viewportFraction: 0.70,
-                  scale: 0.6)),
-          // name
-          Container(
-              height: 90.0,
-              child: Column(children: <Widget>[
-                Text(_name,
-                    style: TextStyle(
-                        fontSize: 20.0, color: Color.fromRGBO(24, 29, 40, 1))),
-                Gaps.vGap10,
-                Text(_artists,
-                    style: TextStyle(
-                        fontSize: 15.0, color: Color.fromRGBO(24, 29, 40, 1)))
-              ])),
-          // play
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                // unlike
-                CircleButton(
-                  onPressedAction: () {
-                    _saveMusic(_name, songsData[onTop].audioPath);
-                  },
-                  fillColor: Colors.white,
-                  splashColor: lightAccentColor,
-                  highlightColor: lightAccentColor.withOpacity(0.5),
-                  elevation: 5.0,
-                  highlightElevation: 5,
-                  icon: Icons.file_download,
-                  iconColor: Theme.of(context).primaryColor,
-                  iconSize: 20,
+        body: songs.length > 0
+            ? Column(children: <Widget>[
+                /// cd
+                Expanded(
+                  child: Center(
+                    child: Container(
+                        height: 300.0,
+                        child: Swiper(
+                            itemBuilder: (BuildContext context, int index) =>
+                                AnimatedCDView(
+                                    animation: _controller,
+                                    imageUrl: songs[index].albumArtUrl),
+                            onIndexChanged: (i) => setState(() {
+                                  onTop = i;
+                                  _name = songs[i].title;
+                                  _artists = songs[i].artists;
+                                  startPlay();
+                                }),
+                            itemCount: songs.length,
+                            viewportFraction: 0.70,
+                            scale: 0.6)),
+                  ),
                 ),
-                // play && pause
-                CircleButton(
-                  onPressedAction: () => setState(() {
-                    isPlay = !isPlay;
-                    if (isPlay) {
-                      _controller.repeat();
-                      if (_isPlaying) {
-                        flutterSound.resumePlayer();
-                      } else {
-                        startPlay();
-                      }
-                    } else {
-                      _controller.stop();
-                      if (_isPlaying) {
-                        flutterSound.pausePlayer();
-                      }
-                    }
-                  }),
-                  size: 80,
-                  fillColor: Colors.white,
-                  splashColor: lightAccentColor,
-                  highlightColor: lightAccentColor.withOpacity(0.5),
-                  elevation: 8.0,
-                  highlightElevation: 5,
-                  icon: isPlay ? Icons.pause : Icons.play_arrow,
-                  iconColor: Theme.of(context).primaryColor,
-                  iconSize: 50,
-                ),
-                // like
-                CircleButton(
-                  onPressedAction: () {
-                    Toast.show(context, '$_artists - $_name');
-                    Utils.copyToClipboard('$_artists - $_name');
-                  },
-                  fillColor: Colors.white,
-                  splashColor: lightAccentColor,
-                  highlightColor: lightAccentColor.withOpacity(0.5),
-                  elevation: 5.0,
-                  highlightElevation: 5,
-                  icon: Icons.favorite_border,
-                  iconColor: Theme.of(context).primaryColor,
-                  iconSize: 20,
-                )
-              ]),
-          // 进度条
-          Slider(
-              onChanged: (double value) async {
-                if (isPlay) {
-                  setState(() => _value = value);
-                  await flutterSound.seekToPlayer(value.toInt());
-                }
-              },
-              value: _value,
-              min: 0.0,
-              max: maxDuration),
 
-          Text('$currentPositionTxt / $maxDurationTxt')
-        ]));
+                // name
+                Container(
+                    height: 90.0,
+                    child: Column(children: <Widget>[
+                      Text(_name,
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Color.fromRGBO(24, 29, 40, 1))),
+                      Gaps.vGap10,
+                      Text(_artists,
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              color: Color.fromRGBO(24, 29, 40, 1)))
+                    ])),
+                // play
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      // unlike
+                      CircleButton(
+                        onPressedAction: () {
+                          _saveMusic(_name, songs[onTop].audioPath);
+                        },
+                        fillColor: Colors.white,
+                        splashColor: lightAccentColor,
+                        highlightColor: lightAccentColor.withOpacity(0.5),
+                        elevation: 5.0,
+                        highlightElevation: 5,
+                        icon: Icons.file_download,
+                        iconColor: Theme.of(context).primaryColor,
+                        iconSize: 20,
+                      ),
+                      // play && pause
+                      CircleButton(
+                        onPressedAction: () => setState(() {
+                          isPlay = !isPlay;
+                          if (isPlay) {
+                            _controller.repeat();
+                            if (_isPlaying) {
+                              flutterSound.resumePlayer();
+                            } else {
+                              startPlay();
+                            }
+                          } else {
+                            _controller.stop();
+                            if (_isPlaying) {
+                              flutterSound.pausePlayer();
+                            }
+                          }
+                        }),
+                        size: 80,
+                        fillColor: Colors.white,
+                        splashColor: lightAccentColor,
+                        highlightColor: lightAccentColor.withOpacity(0.5),
+                        elevation: 8.0,
+                        highlightElevation: 5,
+                        icon: isPlay ? Icons.pause : Icons.play_arrow,
+                        iconColor: Theme.of(context).primaryColor,
+                        iconSize: 50,
+                      ),
+                      // like
+                      CircleButton(
+                        onPressedAction: () {
+                          Toast.show(context, '$_artists - $_name');
+                          Utils.copyToClipboard('$_artists - $_name');
+                        },
+                        fillColor: Colors.white,
+                        splashColor: lightAccentColor,
+                        highlightColor: lightAccentColor.withOpacity(0.5),
+                        elevation: 5.0,
+                        highlightElevation: 5,
+                        icon: Icons.favorite_border,
+                        iconColor: Theme.of(context).primaryColor,
+                        iconSize: 20,
+                      )
+                    ]),
+                // 进度条
+                Slider(
+                    onChanged: (double value) async {
+                      if (isPlay) {
+                        setState(() => _value = value);
+                        await flutterSound.seekToPlayer(value.toInt());
+                      }
+                    },
+                    value: _value,
+                    min: 0.0,
+                    max: maxDuration),
+
+                Text('$currentPositionTxt / $maxDurationTxt'),
+                Gaps.vGap(Utils.bottomSafeHeight)
+              ])
+            : LoadingView());
   }
 
   //停止播放
@@ -198,7 +208,7 @@ class _FlutterSoundPageState extends State<FlutterSoundPage>
       flutterSound.stopPlayer();
     }
 
-    await flutterSound.startPlayer(songsData[onTop].audioPath);
+    await flutterSound.startPlayer(songs[onTop].audioPath);
 
     try {
       setState(() {
@@ -247,5 +257,16 @@ class _FlutterSoundPageState extends State<FlutterSoundPage>
     });
     final result = await ImageGallerySaver.saveFile(savePath);
     debugPrint(result);
+  }
+
+  void getSongs() async {
+    List<Song> list = await ApiService.getMusics();
+
+    songs.addAll(list);
+
+    _name = songs?.first?.title;
+    _artists = songs?.first?.artists;
+
+    setState(() {});
   }
 }

@@ -7,14 +7,12 @@ class ClassifyPage extends StatefulWidget {
   final String title;
   final int categoryIndex;
   final int subIndex;
-  final GoodsProvider provider;
 
   ClassifyPage(
     this.title, {
     Key key,
     this.categoryIndex = 0,
     this.subIndex = 0,
-    this.provider,
   })  : assert(categoryIndex != null),
         assert(subIndex != null),
         super(key: key);
@@ -48,19 +46,18 @@ class _ClassifyPageState extends State<ClassifyPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('${widget.title}'),
+            backgroundColor: Colors.deepPurple),
         backgroundColor: Colors.grey[200],
-        body: Column(children: <Widget>[
-          ToolBar(title: '${widget.title}', backgroundColor: Colors.deepPurple),
-          Expanded(
-              child:
-                  category.isNotEmpty ? _buildBodyView() : getLoadingWidget())
-        ]));
+        body: category.isNotEmpty ? _buildBodyView() : LoadingWidget());
   }
 
   void getCategoryData() async {
     category = await ApiService.getBaixingCategoryData();
 
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   Widget _buildBodyView() {
@@ -69,10 +66,10 @@ class _ClassifyPageState extends State<ClassifyPage>
           category: category, index: parentCategoryIndex, rightKey: rightKey),
       Container(height: double.infinity, color: Colors.grey[500], width: 0.5),
       RightListView(
-          key: rightKey,
-          subCategory: category[parentCategoryIndex],
-          subCategoryIndex: subCategoryIndex,
-          provider: widget.provider)
+        key: rightKey,
+        subCategory: category[parentCategoryIndex],
+        subCategoryIndex: subCategoryIndex,
+      )
     ]);
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/enum/enum.dart';
 
@@ -36,6 +37,7 @@ class ImageLoadView extends StatelessWidget {
   final Color filterColor;
 
   final Widget child;
+  final EdgeInsetsGeometry padding;
 
   /// 子控件位置
   final AlignmentGeometry alignment;
@@ -45,7 +47,7 @@ class ImageLoadView extends StatelessWidget {
     Key key,
     this.width,
     this.height,
-    this.fit: BoxFit.fill,
+    this.fit: BoxFit.cover,
     this.borderRadius: const BorderRadius.all(Radius.circular(0.0)),
     this.placeholder: "images/loading.png",
     this.imageType: ImageType.network,
@@ -53,8 +55,9 @@ class ImageLoadView extends StatelessWidget {
     this.sigmaX: 0.0,
     this.sigmaY: 0.0,
     this.filterColor: Colors.transparent,
-    this.child: const SizedBox(),
+    this.child,
     this.alignment: Alignment.center,
+    this.padding: EdgeInsets.zero,
   })  : assert(path != null),
         super(key: key);
 
@@ -64,10 +67,12 @@ class ImageLoadView extends StatelessWidget {
 
     switch (imageType) {
       case ImageType.network:
-        imageWidget = FadeInImage(
-            placeholder: AssetImage(placeholder),
-            image: NetworkImage(path),
-            fit: fit);
+        imageWidget = CachedNetworkImage(
+          placeholder: (context, url) => Image.asset(placeholder),
+          imageUrl: path,
+          fit: fit,
+          errorWidget: (context, url, error) => Image.asset(placeholder),
+        );
         break;
       case ImageType.assets:
         imageWidget = FadeInImage(
@@ -80,9 +85,6 @@ class ImageLoadView extends StatelessWidget {
             placeholder: AssetImage(placeholder),
             image: FileImage(File(path)),
             fit: fit);
-        break;
-      default:
-        imageWidget = Image.asset(placeholder);
         break;
     }
 
@@ -101,8 +103,9 @@ class ImageLoadView extends StatelessWidget {
                 opacity: opacity,
                 child: Container(
                   color: filterColor,
-                  child: child,
+                  child: child ?? const SizedBox(),
                   alignment: alignment,
+                  padding: padding,
                 ),
               ),
             )

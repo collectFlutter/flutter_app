@@ -57,18 +57,17 @@ class _MovieWithCelebrityPageState extends State<MovieWithCelebrityPage> {
     } else if (type == RefreshType.LOAD_MORE) {
       movies.addAll(list);
       if (list.isEmpty) {
-        Toast.show(context, "加载完...",
-            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+        Toast.show(context, "加载完...");
         isLoadComplete = true;
       }
     }
 
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   Widget builderPageView() {
     if (isFirst && movies.isEmpty) {
-      return getLoadingWidget();
+      return LoadingWidget();
     }
     return EasyRefresh(
       footer: BallPulseFooter(),

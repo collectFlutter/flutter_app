@@ -33,13 +33,6 @@ class ContactPage extends StatefulWidget {
 class _ContactPageState extends State<ContactPage> {
   final double _appBarHeight = 256.0;
 
-  Future<Null> _launched;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +64,6 @@ class _ContactPageState extends State<ContactPage> {
                 ),
                 BuildPhoneView(
                   phone: widget.phone,
-                  launched: _launched,
                   cell: widget.cell,
                 ),
                 BuildEmailView(email: widget.email),
@@ -88,20 +80,11 @@ class _ContactPageState extends State<ContactPage> {
                     dd
                   ])}",
                 ),
-                FutureBuilder<Null>(future: _launched, builder: _launchStatus),
               ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  Widget _launchStatus(BuildContext context, AsyncSnapshot<Null> snapshot) {
-    if (snapshot.hasError) {
-      return Text('Error: ${snapshot.error}');
-    } else {
-      return const Text('');
-    }
   }
 }
