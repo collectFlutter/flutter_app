@@ -178,6 +178,8 @@ export 'tubitv/home.dart';
 
 export 'nba/index.dart';
 
+export 'sars_cov/index.dart';
+
 export 'ui_screen/bank_screen.dart';
 export 'ui_screen/sliding_login.dart';
 export 'ui_screen/logon.dart';
@@ -187,6 +189,8 @@ export 'ui_screen/guillotine_menu.dart';
 export 'ui_screen/bottom_menu.dart';
 export 'ui_screen/navigation/light_drawer.dart';
 export 'ui_screen/qrcode.dart';
+export 'ui_screen/food_style/personal_center.dart';
+export 'ui_screen/sign_in.dart';
 
 export 'res/colors.dart';
 export 'res/dimens.dart';

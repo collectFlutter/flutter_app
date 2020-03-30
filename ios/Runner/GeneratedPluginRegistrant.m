@@ -28,16 +28,22 @@
 @import barcode_scan;
 #endif
 
-#if __has_include(<contact_picker/ContactPickerPlugin.h>)
-#import <contact_picker/ContactPickerPlugin.h>
-#else
-@import contact_picker;
-#endif
-
 #if __has_include(<device_info/FLTDeviceInfoPlugin.h>)
 #import <device_info/FLTDeviceInfoPlugin.h>
 #else
 @import device_info;
+#endif
+
+#if __has_include(<easy_contact_picker/EasyContactPickerPlugin.h>)
+#import <easy_contact_picker/EasyContactPickerPlugin.h>
+#else
+@import easy_contact_picker;
+#endif
+
+#if __has_include(<flutter_charts/FlutterChartsPlugin.h>)
+#import <flutter_charts/FlutterChartsPlugin.h>
+#else
+@import flutter_charts;
 #endif
 
 #if __has_include(<flutter_jd_address_selector/FlutterJdAddressSelectorPlugin.h>)
@@ -112,12 +118,6 @@
 @import rounded_letter;
 #endif
 
-#if __has_include(<screen/ScreenPlugin.h>)
-#import <screen/ScreenPlugin.h>
-#else
-@import screen;
-#endif
-
 #if __has_include(<share/FLTSharePlugin.h>)
 #import <share/FLTSharePlugin.h>
 #else
@@ -148,6 +148,12 @@
 @import video_player;
 #endif
 
+#if __has_include(<wakelock/WakelockPlugin.h>)
+#import <wakelock/WakelockPlugin.h>
+#else
+@import wakelock;
+#endif
+
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
@@ -155,8 +161,9 @@
   [AmapLocationFluttifyPlugin registerWithRegistrar:[registry registrarForPlugin:@"AmapLocationFluttifyPlugin"]];
   [AudioplayersPlugin registerWithRegistrar:[registry registrarForPlugin:@"AudioplayersPlugin"]];
   [BarcodeScanPlugin registerWithRegistrar:[registry registrarForPlugin:@"BarcodeScanPlugin"]];
-  [ContactPickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"ContactPickerPlugin"]];
   [FLTDeviceInfoPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTDeviceInfoPlugin"]];
+  [EasyContactPickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"EasyContactPickerPlugin"]];
+  [FlutterChartsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterChartsPlugin"]];
   [FlutterJdAddressSelectorPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterJdAddressSelectorPlugin"]];
   [FlutterSoundPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSoundPlugin"]];
   [FlutterWebviewPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterWebviewPlugin"]];
@@ -169,12 +176,12 @@
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
   [PermissionHandlerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PermissionHandlerPlugin"]];
   [RoundedLetterPlugin registerWithRegistrar:[registry registrarForPlugin:@"RoundedLetterPlugin"]];
-  [ScreenPlugin registerWithRegistrar:[registry registrarForPlugin:@"ScreenPlugin"]];
   [FLTSharePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharePlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
   [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
   [FLTVideoPlayerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTVideoPlayerPlugin"]];
+  [WakelockPlugin registerWithRegistrar:[registry registrarForPlugin:@"WakelockPlugin"]];
 }
 
 @end

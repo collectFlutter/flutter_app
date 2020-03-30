@@ -78,54 +78,57 @@ class _DetailsPageState extends State<DetailsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[200],
-        body: goods == null
-            ? LoadingWidget()
-            : Column(children: <Widget>[_buildBodyView(), _buildBottomView()]));
-  }
-
-  Widget _buildBodyView() {
-    return Expanded(
-      child: CustomScrollView(controller: scrollController, slivers: <Widget>[
-        /// 头部banner
-        _buildSliverAppBar(goods.goodInfo.pics),
-
-        /// 简介
-        _buildInfoView(goods.goodInfo),
-
-        _buildTabBar(),
-
-        _buildDetails()
-      ]),
+      backgroundColor: Colors.grey[200],
+      body: _buildBodyView(),
+      bottomNavigationBar: _buildBottomView(),
     );
   }
 
+  Widget _buildBodyView() {
+    return goods == null
+        ? LoadingWidget()
+        : CustomScrollView(controller: scrollController, slivers: <Widget>[
+            /// 头部banner
+            _buildSliverAppBar(goods.goodInfo.pics),
+
+            /// 简介
+            _buildInfoView(goods.goodInfo),
+
+            _buildTabBar(),
+
+            _buildDetails()
+          ]);
+  }
+
   Widget _buildBottomView() {
-    return Row(children: <Widget>[
-      Expanded(
-          child: GestureDetector(
-              onTap: () {
-                Toast.show(context, '加入购物车');
-                Store.value<ShoppingCartModel>(context, listen: false)
-                    .addGoodsToCart(goods.goodInfo);
-              },
-              child: Container(
-                  alignment: Alignment.center,
-                  height: 48.0,
-                  child: Text('加入购物车', style: TextStyle(color: Colors.white)),
-                  color: Colors.orange))),
-      Expanded(
-          child: GestureDetector(
-              onTap: () {
-                /// TODO 立即购买
-                Toast.show(context, '立即购买');
-              },
-              child: Container(
-                  height: 48.0,
-                  alignment: Alignment.center,
-                  child: Text('立即购买', style: TextStyle(color: Colors.white)),
-                  color: Colors.red)))
-    ]);
+    return Container(
+      padding: EdgeInsets.only(bottom: Utils.bottomSafeHeight),
+      child: Row(children: <Widget>[
+        Expanded(
+            child: GestureDetector(
+                onTap: () {
+                  Toast.show(context, '加入购物车');
+                  Store.value<ShoppingCartModel>(context, listen: false)
+                      .addGoodsToCart(goods.goodInfo);
+                },
+                child: Container(
+                    alignment: Alignment.center,
+                    height: 48.0,
+                    child: Text('加入购物车', style: TextStyle(color: Colors.white)),
+                    color: Colors.orange))),
+        Expanded(
+            child: GestureDetector(
+                onTap: () {
+                  /// TODO 立即购买
+                  Toast.show(context, '立即购买');
+                },
+                child: Container(
+                    height: 48.0,
+                    alignment: Alignment.center,
+                    child: Text('立即购买', style: TextStyle(color: Colors.white)),
+                    color: Colors.red)))
+      ]),
+    );
   }
 
   void getGoodsInfo() async {
